@@ -1,0 +1,92 @@
+﻿@model IEnumerable<WebApplication1.Models.Inscripcion>
+
+@{
+    ViewData["Title"] = "Inscripciones";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h1 class="fw-bold mb-1">
+            Inscripciones
+        </h1>
+
+        <p class="text-muted mb-0">
+            Alumnos inscritos en los talleres de DATA CODE 2.0.
+        </p>
+    </div>
+
+    <a asp-controller="Inscripciones"
+       asp-action="Create"
+       class="btn btn-register"
+       style="width:auto">
+
+        <i class="bi bi-plus-circle"></i>
+        Nueva inscripción
+    </a>
+
+</div>
+
+
+@if (TempData["Exito"] != null)
+{
+    <div class="alert alert-success">
+        <i class="bi bi-check-circle-fill"></i>
+        @TempData["Exito"]
+    </div>
+}
+
+
+<div class="table-responsive">
+
+    <table class="table align-middle bg-white">
+
+        <thead>
+            <tr>
+                <th>Alumno</th>
+                <th>Taller</th>
+                <th>Fecha de inscripción</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var inscripcion in Model)
+            {
+                <tr>
+
+                    <td>
+                        <strong>
+                            @inscripcion.alumno?.Nombre
+                        </strong>
+
+                        <br />
+
+                        <small class="text-muted">
+                            @inscripcion.alumno?.Matricula
+                        </small>
+                    </td>
+
+                    <td>
+                        @inscripcion.horarioTaller?.Taller?.nombre
+                    </td>
+
+                    <td>
+                        @inscripcion.FechaInscripcion.ToString("dd/MM/yyyy HH:mm")
+                    </td>
+
+                    <td>
+                        <span class="badge bg-success">
+                            @inscripcion.estado
+                        </span>
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>
