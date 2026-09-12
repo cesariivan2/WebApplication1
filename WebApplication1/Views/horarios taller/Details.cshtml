@@ -1,0 +1,140 @@
+﻿@model WebApplication1.Models.HorarioTaller
+
+@{
+    ViewData["Title"] = "Detalle del horario";
+}
+
+<div class="detail-page">
+
+    <a asp-controller="HorariosTaller"
+       asp-action="Index"
+       class="back-link">
+
+        <i class="bi bi-arrow-left"></i>
+        Volver a horarios
+    </a>
+
+    <div class="detail-card">
+
+        <div class="detail-header">
+
+            <div class="detail-icon">
+                <i class="bi bi-calendar-event"></i>
+            </div>
+
+            <div>
+                <span class="detail-badge">
+                    DATA CODE 2.0
+                </span>
+
+                <h1>
+                    @(Model.Taller?.nombre ?? "Horario")
+                </h1>
+
+                <p>
+                    Información completa del horario
+                </p>
+            </div>
+
+        </div>
+
+        <div class="detail-body">
+
+            <div class="detail-description">
+
+                <h4>Horario del taller</h4>
+
+                <div class="schedule-row">
+
+                    <i class="bi bi-calendar3"></i>
+
+                    <div>
+                        <small>Fecha</small>
+
+                        <strong>
+                            @Model.fecha.ToString("dd/MM/yyyy")
+                        </strong>
+                    </div>
+
+                </div>
+
+                <div class="schedule-row">
+
+                    <i class="bi bi-clock"></i>
+
+                    <div>
+                        <small>Horario</small>
+
+                        <strong>
+                            @Model.horaInicio.ToString(@"hh\:mm")
+                            -
+                            @Model.horaFin.ToString(@"hh\:mm")
+                        </strong>
+                    </div>
+
+                </div>
+
+                <div class="schedule-row">
+
+                    <i class="bi bi-geo-alt"></i>
+
+                    <div>
+                        <small>Espacio</small>
+
+                        <strong>
+                            @Model.Espacio
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="detail-info-box">
+
+                <h5>Cupos</h5>
+
+                <div class="detail-info-item">
+
+                    <i class="bi bi-sun"></i>
+
+                    <div>
+                        <small>Matutino</small>
+
+                        <strong>
+                            @Model.CupoMatutino lugares
+                        </strong>
+                    </div>
+
+                </div>
+
+                <div class="detail-info-item">
+
+                    <i class="bi bi-moon"></i>
+
+                    <div>
+                        <small>Vespertino</small>
+
+                        <strong>
+                            @Model.CupoVespertino lugares
+                        </strong>
+                    </div>
+
+                </div>
+
+                <a asp-controller="HorariosTaller"
+                   asp-action="Edit"
+                   asp-route-id="@Model.id"
+                   class="btn btn-register">
+
+                    <i class="bi bi-pencil"></i>
+                    Editar horario
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
