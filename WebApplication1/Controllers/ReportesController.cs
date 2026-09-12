@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using Microsoft.AspNetCore.Authorization;
-
+using WebApplication1.Models;
 namespace WebApplication1.Controllers
 {
     [Authorize(Roles = "Administrador")]
@@ -60,78 +60,89 @@ namespace WebApplication1.Controllers
         // ==========================================
         public async Task<IActionResult> Ocupacion()
         {
-            var horarios = await _context.HorariosTaller
-                .Include(h => h.Taller)
-                .OrderBy(h => h.fecha)
-                .ThenBy(h => h.horaInicio)
-                .ToListAsync();
+            var horarios =
+                await _context.HorariosTaller
+                    .Include(h => h.Taller)
+                    .OrderBy(h => h.fecha)
+                    .ThenBy(h => h.horaInicio)
+                    .ToListAsync();
 
-            var reporte = new List<object>();
+
+            var reporte =
+                new List<ReporteOcupacionViewModel>();
+
 
             foreach (var horario in horarios)
             {
-                int matutinos = await _context.Inscripciones
-                    .Include(i => i.alumno)
-                    .CountAsync(i =>
-                        i.horarioTallerId == horario.id &&
-                        i.estado == "Confirmada" &&
-                        i.alumno != null &&
-                        i.alumno.Turno == "Matutino"
-                    );
+                int matutinos =
+                    await _context.Inscripciones
+                        .Include(i => i.alumno)
+                        .CountAsync(i =>
+                            i.horarioTallerId == horario.id &&
+                            i.estado == "Confirmada" &&
+                            i.alumno != null &&
+                            i.alumno.Turno == "Matutino"
+                        );
 
-                int vespertinos = await _context.Inscripciones
-                    .Include(i => i.alumno)
-                    .CountAsync(i =>
-                        i.horarioTallerId == horario.id &&
-                        i.estado == "Confirmada" &&
-                        i.alumno != null &&
-                        i.alumno.Turno == "Vespertino"
-                    );
 
-                int disponiblesMatutinos =
-                    horario.CupoMatutino - matutinos;
+                int vespertinos =
+                    await _context.Inscripciones
+                        .Include(i => i.alumno)
+                        .CountAsync(i =>
+                            i.horarioTallerId == horario.id &&
+                            i.estado == "Confirmada" &&
+                            i.alumno != null &&
+                            i.alumno.Turno == "Vespertino"
+                        );
 
-                int disponiblesVespertinos =
-                    horario.CupoVespertino - vespertinos;
 
-                reporte.Add(new
-                {
-                    HorarioId = horario.id,
+                reporte.Add(
+                    new ReporteOcupacionViewModel
+                    {
+                        HorarioId =
+                            horario.id,
 
-                    Taller =
-                        horario.Taller != null
-                            ? horario.Taller.nombre
-                            : "Sin taller",
+                        Taller =
+                            horario.Taller?.nombre
+                            ?? "Sin taller",
 
-                    Fecha = horario.fecha,
+                        Fecha =
+                            horario.fecha,
 
-                    HoraInicio = horario.horaInicio,
+                        HoraInicio =
+                            horario.horaInicio,
 
-                    HoraFin = horario.horaFin,
+                        HoraFin =
+                            horario.horaFin,
 
-                    Espacio = horario.Espacio,
+                        Espacio =
+                            horario.Espacio,
 
-                    CupoMatutino = horario.CupoMatutino,
+                        CupoMatutino =
+                            horario.CupoMatutino,
 
-                    InscritosMatutinos = matutinos,
+                        InscritosMatutinos =
+                            matutinos,
 
-                    DisponiblesMatutinos =
-                        disponiblesMatutinos,
+                        DisponiblesMatutinos =
+                            horario.CupoMatutino -
+                            matutinos,
 
-                    CupoVespertino =
-                        horario.CupoVespertino,
+                        CupoVespertino =
+                            horario.CupoVespertino,
 
-                    InscritosVespertinos =
-                        vespertinos,
+                        InscritosVespertinos =
+                            vespertinos,
 
-                    DisponiblesVespertinos =
-                        disponiblesVespertinos
-                });
+                        DisponiblesVespertinos =
+                            horario.CupoVespertino -
+                            vespertinos
+                    }
+                );
             }
 
-            ViewBag.Reporte = reporte;
 
-            return View();
+            return View(reporte);
         }
 
         // ==========================================

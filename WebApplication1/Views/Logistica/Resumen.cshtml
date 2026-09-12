@@ -1,0 +1,140 @@
+﻿@{
+    ViewData["Title"] = "Resumen logístico";
+
+    int espacios =
+        ViewBag.TotalEspacios ?? 0;
+
+    int horarios =
+        ViewBag.TotalHorarios ?? 0;
+
+    int confirmadas =
+        ViewBag.TotalInscripcionesConfirmadas ?? 0;
+
+    int canceladas =
+        ViewBag.TotalInscripcionesCanceladas ?? 0;
+
+    int talleres =
+        ViewBag.TotalTalleres ?? 0;
+}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h1>
+            <i class="bi bi-speedometer2"></i>
+            Resumen operativo
+        </h1>
+
+        <a asp-action="Agenda"
+           class="btn btn-outline-primary">
+            Agenda
+        </a>
+
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 text-center h-100">
+                <div class="card-body">
+
+                    <i class="bi bi-journal-code fs-1"></i>
+
+                    <h2 class="mt-2">
+                        @talleres
+                    </h2>
+
+                    <p class="mb-0">
+                        Talleres
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 text-center h-100">
+                <div class="card-body">
+
+                    <i class="bi bi-calendar3 fs-1"></i>
+
+                    <h2 class="mt-2">
+                        @horarios
+                    </h2>
+
+                    <p class="mb-0">
+                        Horarios
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 text-center h-100">
+                <div class="card-body">
+
+                    <i class="bi bi-building fs-1"></i>
+
+                    <h2 class="mt-2">
+                        @espacios
+                    </h2>
+
+                    <p class="mb-0">
+                        Espacios
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border-0 text-center">
+
+                <div class="card-body">
+
+                    <h2 class="text-success">
+                        @confirmadas
+                    </h2>
+
+                    <p class="mb-0">
+                        Inscripciones confirmadas
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border-0 text-center">
+
+                <div class="card-body">
+
+                    <h2 class="text-danger">
+                        @canceladas
+                    </h2>
+
+                    <p class="mb-0">
+                        Inscripciones canceladas
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

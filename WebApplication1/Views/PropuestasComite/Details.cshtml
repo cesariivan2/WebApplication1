@@ -1,0 +1,182 @@
+﻿@model PropuestaComite
+
+@{
+    ViewData["Title"] = "Detalle de propuesta";
+
+    int aFavor = ViewBag.VotosAFavor ?? 0;
+    int enContra = ViewBag.VotosEnContra ?? 0;
+    int abstenciones = ViewBag.Abstenciones ?? 0;
+
+    int total =
+        aFavor +
+        enContra +
+        abstenciones;
+}
+
+<div class="container py-4"
+     style="max-width: 900px;">
+
+    <a asp-action="Index"
+       class="btn btn-link ps-0 mb-3">
+
+        <i class="bi bi-arrow-left"></i>
+        Volver
+    </a>
+
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between align-items-start mb-3">
+
+                <div>
+
+                    @if (Model.Estado == "Abierta")
+                    {
+                        <span class="badge bg-success mb-2">
+                            Abierta
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary mb-2">
+                            Cerrada
+                        </span>
+                    }
+
+                    <h1>
+                        @Model.Titulo
+                    </h1>
+
+                </div>
+
+            </div>
+
+
+            <p class="fs-5">
+                @Model.Descripcion
+            </p>
+
+
+            <hr />
+
+
+            <p>
+                <strong>Fecha de creación:</strong>
+                @Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm")
+            </p>
+
+
+            @if (Model.FechaCierre != null)
+            {
+                <p>
+                    <strong>Fecha de cierre:</strong>
+                    @Model.FechaCierre.Value.ToString("dd/MM/yyyy HH:mm")
+                </p>
+            }
+
+
+            @if (Model.CreadoPorUsuario != null)
+            {
+                <p>
+                    <strong>Creada por:</strong>
+                    @Model.CreadoPorUsuario.Email
+                </p>
+            }
+
+
+            @if (User.IsInRole("Alumno") &&
+                 Model.Estado == "Abierta")
+            {
+                <a asp-controller="Votaciones"
+                   asp-action="Votar"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-success">
+
+                    <i class="bi bi-check2-circle"></i>
+                    Emitir voto
+                </a>
+            }
+
+        </div>
+
+    </div>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            <h3 class="mb-4">
+                Resultados actuales
+            </h3>
+
+
+            <div class="row text-center g-3">
+
+                <div class="col-md-4">
+
+                    <div class="border rounded p-3">
+
+                        <h2 class="text-success">
+                            @aFavor
+                        </h2>
+
+                        <span>
+                            A favor
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="border rounded p-3">
+
+                        <h2 class="text-danger">
+                            @enContra
+                        </h2>
+
+                        <span>
+                            En contra
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="border rounded p-3">
+
+                        <h2>
+                            @abstenciones
+                        </h2>
+
+                        <span>
+                            Abstenciones
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <p class="text-center mt-4 mb-0">
+
+                <strong>Total de votos:</strong>
+                @total
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>

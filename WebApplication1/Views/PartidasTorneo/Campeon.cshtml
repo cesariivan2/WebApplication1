@@ -1,0 +1,75 @@
+﻿@model ParticipanteTorneo
+
+@{
+    ViewData["Title"] = "Campeón";
+
+    var torneo =
+        ViewBag.Torneo as TorneoVideojuego;
+}
+
+<div class="container py-5"
+     style="max-width: 800px;">
+
+    <div class="card shadow border-0 text-center">
+
+        <div class="card-body p-5">
+
+            <div class="display-1 mb-3">
+                🏆
+            </div>
+
+
+            <h1 class="fw-bold">
+                Campeón
+            </h1>
+
+
+            @if (torneo != null)
+            {
+                <h4 class="text-muted mb-4">
+                    @torneo.Nombre
+                </h4>
+            }
+
+
+            <div class="display-5 fw-bold text-primary">
+
+                @Model.Alumno?.Nombre
+
+            </div>
+
+
+            <p class="fs-5 text-muted mt-2">
+
+                Matrícula:
+                @Model.Alumno?.Matricula
+
+            </p>
+
+
+            @if (torneo != null)
+            {
+                <p>
+                    <strong>Videojuego:</strong>
+                    @torneo.Videojuego
+                </p>
+
+                <p>
+                    <strong>Plataforma:</strong>
+                    @torneo.Plataforma
+                </p>
+            }
+
+
+            <a asp-action="Index"
+               asp-route-torneoId="@Model.TorneoVideojuegoId"
+               class="btn btn-primary mt-3">
+
+                Ver partidas
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
