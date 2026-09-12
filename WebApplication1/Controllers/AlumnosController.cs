@@ -218,21 +218,39 @@ namespace WebApplication1.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Edit(
-            int id,
-            Alumno alumno)
+    int id,
+    Alumno alumno)
         {
             if (id != alumno.Id)
             {
                 return NotFound();
             }
 
-            // Evitar que otro alumno tenga
-            // la misma matrícula
-            bool matriculaExiste = await _context.Alumnos
-                .AnyAsync(a =>
-                    a.Matricula == alumno.Matricula &&
-                    a.Id != alumno.Id
-                );
+
+            // ==========================================
+            // BUSCAR ALUMNO REAL EN LA BASE
+            // ==========================================
+            var alumnoActual =
+                await _context.Alumnos
+                    .FirstOrDefaultAsync(
+                        a => a.Id == id
+                    );
+
+            if (alumnoActual == null)
+            {
+                return NotFound();
+            }
+
+
+            // ==========================================
+            // VALIDAR MATRÍCULA REPETIDA
+            // ==========================================
+            bool matriculaExiste =
+                await _context.Alumnos
+                    .AnyAsync(a =>
+                        a.Matricula == alumno.Matricula &&
+                        a.Id != alumno.Id
+                    );
 
             if (matriculaExiste)
             {
@@ -242,7 +260,10 @@ namespace WebApplication1.Controllers
                 );
             }
 
-            // Validar turno
+
+            // ==========================================
+            // VALIDAR TURNO
+            // ==========================================
             if (alumno.Turno != "Matutino" &&
                 alumno.Turno != "Vespertino")
             {
@@ -252,34 +273,42 @@ namespace WebApplication1.Controllers
                 );
             }
 
-            if (ModelState.IsValid)
+
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Alumnos.Update(alumno);
+                // Conservamos el correo real
+                alumno.Correo =
+                    alumnoActual.Correo;
 
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    bool existe = await _context.Alumnos
-                        .AnyAsync(a => a.Id == alumno.Id);
-
-                    if (!existe)
-                    {
-                        return NotFound();
-                    }
-
-                    throw;
-                }
-
-                TempData["Exito"] =
-                    "Alumno actualizado correctamente.";
-
-                return RedirectToAction(nameof(Index));
+                return View(alumno);
             }
 
-            return View(alumno);
+
+            // ==========================================
+            // ACTUALIZAR SOLO CAMPOS PERMITIDOS
+            // ==========================================
+            alumnoActual.Nombre =
+                alumno.Nombre;
+
+            alumnoActual.Matricula =
+                alumno.Matricula;
+
+            alumnoActual.Turno =
+                alumno.Turno;
+
+            // NO cambiamos:
+            // alumnoActual.Correo
+            // alumnoActual.UsuarioId
+
+            await _context.SaveChangesAsync();
+
+
+            TempData["Exito"] =
+                "Alumno actualizado correctamente.";
+
+            return RedirectToAction(
+                nameof(Index)
+            );
         }
 
         // ==========================================

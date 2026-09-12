@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<IdentityUser>
+            _signInManager;
 
         public AccountController(
             SignInManager<IdentityUser> signInManager)
@@ -14,11 +16,14 @@ namespace WebApplication1.Controllers
             _signInManager = signInManager;
         }
 
+
         // ==========================================
         // ABRIR LOGIN
         // ==========================================
+        [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login(string? returnUrl = null)
+        public IActionResult Login(
+            string? returnUrl = null)
         {
             if (User.Identity?.IsAuthenticated == true)
             {
@@ -30,8 +35,11 @@ namespace WebApplication1.Controllers
 
             ViewBag.ReturnUrl = returnUrl;
 
-            return View();
+            return View(
+                new LoginViewModel()
+            );
         }
+
 
         // ==========================================
         // INICIAR SESIÓN
@@ -40,39 +48,21 @@ namespace WebApplication1.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(
-            string email,
-            string password,
-            bool rememberMe = false,
+            LoginViewModel model,
             string? returnUrl = null)
         {
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                ModelState.AddModelError(
-                    "email",
-                    "El correo es obligatorio."
-                );
-            }
-
-            if (string.IsNullOrWhiteSpace(password))
-            {
-                ModelState.AddModelError(
-                    "password",
-                    "La contraseña es obligatoria."
-                );
-            }
-
             if (!ModelState.IsValid)
             {
                 ViewBag.ReturnUrl = returnUrl;
 
-                return View();
+                return View(model);
             }
 
-            var result = await _signInManager
-                .PasswordSignInAsync(
-                    email,
-                    password,
-                    rememberMe,
+            var result =
+                await _signInManager.PasswordSignInAsync(
+                    model.Email,
+                    model.Password,
+                    model.Recordarme,
                     lockoutOnFailure: false
                 );
 
@@ -97,8 +87,9 @@ namespace WebApplication1.Controllers
 
             ViewBag.ReturnUrl = returnUrl;
 
-            return View();
+            return View(model);
         }
+
 
         // ==========================================
         // CERRAR SESIÓN
@@ -111,10 +102,11 @@ namespace WebApplication1.Controllers
             await _signInManager.SignOutAsync();
 
             return RedirectToAction(
-                "Index",
-                "Home"
+                "Login",
+                "Account"
             );
         }
+
 
         // ==========================================
         // ACCESO DENEGADO
