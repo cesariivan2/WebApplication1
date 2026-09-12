@@ -1,0 +1,65 @@
+﻿@model WebApplication1.Models.Alumno
+
+@{
+    ViewData["Title"] = "Mi gafete";
+}
+
+<div class="badge-page">
+
+    <div class="student-badge">
+
+        <div class="badge-top">
+
+            <div>
+                <small>UAdeO</small>
+                <h2>DATA CODE 2.0</h2>
+            </div>
+
+            <i class="bi bi-code-slash"></i>
+
+        </div>
+
+        <div class="badge-body">
+
+            <div class="badge-photo">
+                <i class="bi bi-person-fill"></i>
+            </div>
+
+            <h3>@Model.Nombre</h3>
+
+            <p class="badge-role">
+                ALUMNO
+            </p>
+
+            <div class="badge-data">
+
+                <div>
+                    <span>Matrícula</span>
+                    <strong>@Model.Matricula</strong>
+                </div>
+
+                <div>
+                    <span>Turno</span>
+                    <strong>@Model.Turno</strong>
+                </div>
+
+                <div>
+                    <span>Correo</span>
+                    <strong>@Model.Correo</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="badge-footer">
+
+            <span>Unidad Regional Guamúchil</span>
+
+            <span>DATA CODE 2.0</span>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1011,3 +1011,69 @@ body {
     color: #777;
     font-size: 12px;
 }
+.login-page {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 480px;
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0,0,0,.10);
+}
+
+.login-brand {
+    text-align: center;
+    padding: 35px 30px;
+    color: white;
+    background: linear-gradient(135deg, #4a071c, #8d123e);
+}
+
+.login-logo {
+    font-family: Georgia, serif;
+    font-size: 42px;
+}
+
+.login-brand span {
+    display: block;
+    opacity: .8;
+    font-size: 13px;
+}
+
+.login-brand h2 {
+    margin-top: 20px;
+    font-weight: 800;
+}
+
+    .login-brand h2 strong {
+        color: #e84779;
+    }
+
+.login-brand p {
+    margin-bottom: 0;
+    opacity: .85;
+}
+
+.login-body {
+    padding: 35px;
+}
+
+    .login-body h3 {
+        font-weight: 700;
+    }
+
+    .login-body .form-control,
+    .login-body .input-group-text {
+        min-height: 48px;
+    }
+
+        .login-body .form-control:focus {
+            border-color: #8d123e;
+            box-shadow: none;
+        }
