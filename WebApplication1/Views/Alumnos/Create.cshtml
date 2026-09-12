@@ -1,0 +1,164 @@
+﻿@model WebApplication1.Models.Alumno
+
+@{
+    ViewData["Title"] = "Nuevo alumno";
+}
+
+<div class="registration-page">
+
+    <a asp-controller="Alumnos"
+       asp-action="Index"
+       class="back-link">
+
+        <i class="bi bi-arrow-left"></i>
+        Volver a alumnos
+
+    </a>
+
+
+    <div class="registration-card">
+
+        <div class="registration-header">
+
+            <span class="detail-badge">
+                DATA CODE 2.0
+            </span>
+
+            <h1>Registrar alumno</h1>
+
+            <p>
+                Captura los datos del alumno participante.
+            </p>
+
+        </div>
+
+
+        <div class="registration-body">
+
+            <form asp-controller="Alumnos"
+                  asp-action="Create"
+                  method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label asp-for="Nombre"
+                           class="form-label">
+
+                        Nombre completo
+
+                    </label>
+
+                    <input asp-for="Nombre"
+                           class="form-control"
+                           placeholder="Ej. Juan Pérez López" />
+
+                    <span asp-validation-for="Nombre"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label asp-for="Matricula"
+                           class="form-label">
+
+                        Matrícula
+
+                    </label>
+
+                    <input asp-for="Matricula"
+                           class="form-control"
+                           placeholder="Ej. 23012345" />
+
+                    <span asp-validation-for="Matricula"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label asp-for="Correo"
+                           class="form-label">
+
+                        Correo electrónico
+
+                    </label>
+
+                    <input asp-for="Correo"
+                           type="email"
+                           class="form-control"
+                           placeholder="correo@ejemplo.com" />
+
+                    <span asp-validation-for="Correo"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <div class="mb-4">
+
+                    <label asp-for="Turno"
+                           class="form-label">
+
+                        Turno
+
+                    </label>
+
+                    <select asp-for="Turno"
+                            class="form-select">
+
+                        <option value="">
+                            Selecciona un turno
+                        </option>
+
+                        <option value="Matutino">
+                            Matutino
+                        </option>
+
+                        <option value="Vespertino">
+                            Vespertino
+                        </option>
+
+                    </select>
+
+                    <span asp-validation-for="Turno"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <button type="submit"
+                        class="btn btn-register">
+
+                    <i class="bi bi-person-check"></i>
+                    Registrar alumno
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

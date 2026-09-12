@@ -1,0 +1,177 @@
+﻿@model WebApplication1.Models.Alumno
+
+@{
+    ViewData["Title"] = "Alumno";
+}
+
+<div class="detail-page">
+
+    <a asp-controller="Alumnos"
+       asp-action="Index"
+       class="back-link">
+
+        <i class="bi bi-arrow-left"></i>
+        Volver a alumnos
+
+    </a>
+
+
+    <div class="detail-card">
+
+        <div class="detail-header">
+
+            <div class="detail-icon">
+
+                <i class="bi bi-person"></i>
+
+            </div>
+
+
+            <div>
+
+                <span class="detail-badge">
+                    ALUMNO
+                </span>
+
+                <h1>
+                    @Model.Nombre
+                </h1>
+
+                <p>
+                    <i class="bi bi-credit-card-2-front"></i>
+
+                    Matrícula:
+                    @Model.Matricula
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="detail-body">
+
+            <div class="detail-description">
+
+                <h4>
+                    Información del alumno
+                </h4>
+
+
+                <div class="student-detail-row">
+
+                    <i class="bi bi-person"></i>
+
+                    <div>
+
+                        <small>Nombre</small>
+
+                        <strong>
+                            @Model.Nombre
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="student-detail-row">
+
+                    <i class="bi bi-envelope"></i>
+
+                    <div>
+
+                        <small>Correo</small>
+
+                        <strong>
+                            @Model.Correo
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="student-detail-row">
+
+                    <i class="bi bi-credit-card-2-front"></i>
+
+                    <div>
+
+                        <small>Matrícula</small>
+
+                        <strong>
+                            @Model.Matricula
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="detail-info-box">
+
+                <h5>
+                    Información académica
+                </h5>
+
+
+                <div class="detail-info-item">
+
+                    <i class="bi bi-clock"></i>
+
+                    <div>
+
+                        <small>Turno</small>
+
+                        <strong>
+                            @Model.Turno
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-info-item">
+
+                    <i class="bi bi-building"></i>
+
+                    <div>
+
+                        <small>Evento</small>
+
+                        <strong>
+                            DATA CODE 2.0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-info-item">
+
+                    <i class="bi bi-geo-alt"></i>
+
+                    <div>
+
+                        <small>Sede</small>
+
+                        <strong>
+                            UAdeO
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
