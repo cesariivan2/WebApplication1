@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WebApplication1.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using WebApplication1.Models;
 
 namespace WebApplication1.Data
 {
@@ -28,7 +28,22 @@ namespace WebApplication1.Data
                 .WithOne()
                 .HasForeignKey<Alumno>(a => a.UsuarioId)
                 .OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<Alumno>()
+    .HasIndex(a => a.Matricula)
+    .IsUnique();
+
+            builder.Entity<Alumno>()
+                .HasIndex(a => a.Correo)
+                .IsUnique();
+            builder.Entity<Inscripcion>()
+    .HasIndex(i => new
+    {
+        i.alumnoId,
+        i.horarioTallerId
+    })
+    .IsUnique();
+
         }
     }
-    }
+}
 
