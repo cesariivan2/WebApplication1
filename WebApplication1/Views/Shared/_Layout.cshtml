@@ -41,7 +41,9 @@
                     Talleres
                 </a>
 
-                <a href="#" class="menu-link">
+                <a asp-controller="Inscripciones"
+                   asp-action="Index"
+                   class="menu-link">
                     <i class="bi bi-check2-square"></i>
                     Inscripciones
                 </a>
@@ -93,7 +95,10 @@
                 <div class="topbar-links">
                     <a href="#" class="active">Inicio</a>
                     <a href="#">Talleres</a>
-                    <a href="#">Inscripciones</a>
+                    <a asp-controller="Inscripciones"
+                       asp-action="Index">
+                        Inscripciones
+                    </a>
                     <a href="#">Torneo</a>
                     <a href="#">Comité</a>
                     <a href="#">Gafetes</a>
