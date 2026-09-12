@@ -57,15 +57,12 @@
             @if (User.Identity?.IsAuthenticated == true)
             {
 
-                @if (User.IsInRole("Alumno"))
-                {<a asp-controller="Alumnos"
-   asp-action="MiGafete"
-   class="menu-link">
-
-    <i class="bi bi-person-badge"></i>
-    Mi gafete
-
-</a>
+@if (User.IsInRole("Alumno"))
+{
+    <a asp-controller="Alumnos"
+       asp-action="MiGafete">
+        Mi gafete
+    </a>
                     <a asp-controller="Talleres"
                        asp-action="Index"
                        class="menu-link">
