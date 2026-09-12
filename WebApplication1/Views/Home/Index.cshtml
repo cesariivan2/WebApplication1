@@ -1,8 +1,334 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- HERO -->
+<section class="hero-section">
+
+    <div class="hero-overlay">
+
+        <div class="hero-text">
+
+            <div class="hero-brand">
+                <span class="hero-uadeo">UAdeO</span>
+                <span class="divider"></span>
+                <span>DATA CODE 2.0</span>
+            </div>
+
+            <h5>Bienvenido a</h5>
+
+            <h1>
+                DATA <span>CODE</span> 2.0
+            </h1>
+
+            <p>
+                El evento donde la tecnología, la creatividad y el talento
+                se unen para construir grandes ideas.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a asp-controller="Talleres"
+                   asp-action="Index"
+                   class="btn btn-primary-custom">
+
+                    <i class="bi bi-calendar-event"></i>
+                    Ver talleres
+                </a>
+
+                <a href="#" class="btn btn-outline-light-custom">
+                    <i class="bi bi-person"></i>
+                    Mis inscripciones
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="hero-phrase">
+            Innovación<br />
+            que transforma
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ACCESOS RÁPIDOS -->
+<section class="section-block">
+
+    <div class="section-title">
+        <i class="bi bi-calendar3"></i>
+
+        <div>
+            <h3>Accesos rápidos</h3>
+            <p>Explora las principales secciones del evento.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-md-3">
+
+            <div class="quick-card pink-card">
+
+                <div class="quick-icon">
+                    <i class="bi bi-mortarboard-fill"></i>
+                </div>
+
+                <h4>Alumnos</h4>
+
+                <p>
+                    Consulta tu información,
+                    talleres y gafete.
+                </p>
+
+                <span>→</span>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="quick-card purple-card">
+
+                <div class="quick-icon">
+                    <i class="bi bi-easel"></i>
+                </div>
+
+                <h4>Talleres</h4>
+
+                <p>
+                    Descubre y elige entre los
+                    talleres disponibles.
+                </p>
+
+                <span>→</span>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="quick-card green-card">
+
+                <div class="quick-icon">
+                    <i class="bi bi-trophy-fill"></i>
+                </div>
+
+                <h4>Torneo</h4>
+
+                <p>
+                    Participa en la competencia
+                    de videojuegos.
+                </p>
+
+                <span>→</span>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="quick-card yellow-card">
+
+                <div class="quick-icon">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+
+                <h4>Comité</h4>
+
+                <p>
+                    Conoce al comité organizador
+                    y sus actividades.
+                </p>
+
+                <span>→</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- TALLERES -->
+<section class="section-block">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <div>
+            <h3 class="mb-1">Talleres destacados</h3>
+            <p class="text-muted mb-0">
+                Conoce algunos de los talleres más populares del evento.
+            </p>
+        </div>
+
+        <a href="#" class="see-all">
+            Ver todos los talleres →
+        </a>
+
+    </div>
+
+
+    <div class="row g-4">
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="workshop-card">
+
+                <img src="~/images/ia.jpg"
+                     alt="Inteligencia Artificial">
+
+                <div class="workshop-body">
+
+                    <h5>Inteligencia Artificial</h5>
+
+                    <p>
+                        <i class="bi bi-person"></i>
+                        Juan Pérez
+                    </p>
+
+                    <p>
+                        <i class="bi bi-clock"></i>
+                        10:00 AM - 12:00 PM
+                    </p>
+
+                    <p>
+                        <i class="bi bi-geo-alt"></i>
+                        Laboratorio 1
+                    </p>
+
+                    <a href="#" class="btn workshop-btn">
+                        Ver más →
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="workshop-card">
+
+                <img src="~/images/videojuegos.jpg"
+                     alt="Desarrollo de Videojuegos">
+
+                <div class="workshop-body">
+
+                    <h5>Desarrollo de Videojuegos</h5>
+
+                    <p>
+                        <i class="bi bi-person"></i>
+                        Ana López
+                    </p>
+
+                    <p>
+                        <i class="bi bi-clock"></i>
+                        1:00 PM - 3:00 PM
+                    </p>
+
+                    <p>
+                        <i class="bi bi-geo-alt"></i>
+                        Laboratorio 2
+                    </p>
+
+                    <a href="#" class="btn workshop-btn">
+                        Ver más →
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="workshop-card">
+
+                <img src="~/images/web.jpg"
+                     alt="Desarrollo Web">
+
+                <div class="workshop-body">
+
+                    <h5>Desarrollo Web</h5>
+
+                    <p>
+                        <i class="bi bi-person"></i>
+                        Carlos Ramírez
+                    </p>
+
+                    <p>
+                        <i class="bi bi-clock"></i>
+                        4:00 PM - 6:00 PM
+                    </p>
+
+                    <p>
+                        <i class="bi bi-geo-alt"></i>
+                        Laboratorio 3
+                    </p>
+
+                    <a href="#" class="btn workshop-btn">
+                        Ver más →
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="workshop-card">
+
+                <img src="~/images/ciberseguridad.jpg"
+                     alt="Ciberseguridad">
+
+                <div class="workshop-body">
+
+                    <h5>Ciberseguridad</h5>
+
+                    <p>
+                        <i class="bi bi-person"></i>
+                        Laura Torres
+                    </p>
+
+                    <p>
+                        <i class="bi bi-clock"></i>
+                        8:00 AM - 10:00 AM
+                    </p>
+
+                    <p>
+                        <i class="bi bi-geo-alt"></i>
+                        Laboratorio 4
+                    </p>
+
+                    <a href="#" class="btn workshop-btn">
+                        Ver más →
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
