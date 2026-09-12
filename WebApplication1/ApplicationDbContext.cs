@@ -124,7 +124,7 @@ namespace WebApplication1.Data
                 .WithMany()
                 .HasForeignKey(p => p.GanadorId)
                 .OnDelete(DeleteBehavior.NoAction);
-
+    
         }
     }
 }
