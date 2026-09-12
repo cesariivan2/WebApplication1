@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers
 {
-    [Authorize(Roles = "Administrador,Comite")]
     public class TalleresController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -17,8 +16,10 @@ namespace WebApplication1.Controllers
         }
 
         // ==========================================
-        // LISTAR TALLERES
+        // VER LISTA DE TALLERES
+        // CUALQUIERA PUEDE VERLOS
         // ==========================================
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var talleres = await _context.Talleres
@@ -29,8 +30,33 @@ namespace WebApplication1.Controllers
         }
 
         // ==========================================
-        // ABRIR FORMULARIO PARA CREAR
+        // VER DETALLES
+        // CUALQUIERA PUEDE VERLOS
         // ==========================================
+        [AllowAnonymous]
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var taller = await _context.Talleres
+                .FirstOrDefaultAsync(t => t.id == id);
+
+            if (taller == null)
+            {
+                return NotFound();
+            }
+
+            return View(taller);
+        }
+
+        // ==========================================
+        // ABRIR CREAR TALLER
+        // ADMINISTRADOR O COMITÉ
+        // ==========================================
+        [Authorize(Roles = "Administrador,Comite")]
         public IActionResult Create()
         {
             return View();
@@ -40,10 +66,10 @@ namespace WebApplication1.Controllers
         // GUARDAR NUEVO TALLER
         // ==========================================
         [HttpPost]
+        [Authorize(Roles = "Administrador,Comite")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Taller taller)
         {
-            // Validar nombre
             if (string.IsNullOrWhiteSpace(taller.nombre))
             {
                 ModelState.AddModelError(
@@ -52,7 +78,6 @@ namespace WebApplication1.Controllers
                 );
             }
 
-            // Validar descripción
             if (string.IsNullOrWhiteSpace(taller.descripcion))
             {
                 ModelState.AddModelError(
@@ -61,16 +86,14 @@ namespace WebApplication1.Controllers
                 );
             }
 
-            // Validar instructor
             if (string.IsNullOrWhiteSpace(taller.instructor))
             {
                 ModelState.AddModelError(
                     "instructor",
-                    "El nombre del instructor es obligatorio."
+                    "El instructor es obligatorio."
                 );
             }
 
-            // Evitar talleres con exactamente el mismo nombre
             bool nombreExiste = await _context.Talleres
                 .AnyAsync(t =>
                     t.nombre.ToLower() ==
@@ -101,29 +124,10 @@ namespace WebApplication1.Controllers
         }
 
         // ==========================================
-        // VER DETALLES
+        // ABRIR EDITAR
+        // ADMINISTRADOR O COMITÉ
         // ==========================================
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var taller = await _context.Talleres
-                .FirstOrDefaultAsync(t => t.id == id);
-
-            if (taller == null)
-            {
-                return NotFound();
-            }
-
-            return View(taller);
-        }
-
-        // ==========================================
-        // ABRIR FORMULARIO PARA EDITAR
-        // ==========================================
+        [Authorize(Roles = "Administrador,Comite")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -146,6 +150,7 @@ namespace WebApplication1.Controllers
         // GUARDAR EDICIÓN
         // ==========================================
         [HttpPost]
+        [Authorize(Roles = "Administrador,Comite")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
             int id,
@@ -156,7 +161,6 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            // Validar nombre
             if (string.IsNullOrWhiteSpace(taller.nombre))
             {
                 ModelState.AddModelError(
@@ -165,7 +169,6 @@ namespace WebApplication1.Controllers
                 );
             }
 
-            // Validar descripción
             if (string.IsNullOrWhiteSpace(taller.descripcion))
             {
                 ModelState.AddModelError(
@@ -174,16 +177,14 @@ namespace WebApplication1.Controllers
                 );
             }
 
-            // Validar instructor
             if (string.IsNullOrWhiteSpace(taller.instructor))
             {
                 ModelState.AddModelError(
                     "instructor",
-                    "El nombre del instructor es obligatorio."
+                    "El instructor es obligatorio."
                 );
             }
 
-            // Evitar nombre duplicado en otro taller
             bool nombreExiste = await _context.Talleres
                 .AnyAsync(t =>
                     t.id != taller.id &&
@@ -230,8 +231,10 @@ namespace WebApplication1.Controllers
         }
 
         // ==========================================
-        // ABRIR CONFIRMACIÓN PARA ELIMINAR
+        // ABRIR ELIMINAR
+        // SOLO ADMINISTRADOR
         // ==========================================
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -252,13 +255,13 @@ namespace WebApplication1.Controllers
 
         // ==========================================
         // ELIMINAR TALLER
+        // SOLO ADMINISTRADOR
         // ==========================================
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Administrador")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            // No permitir eliminar un taller
-            // que ya tenga horarios
             bool tieneHorarios = await _context.HorariosTaller
                 .AnyAsync(h => h.tallerId == id);
 

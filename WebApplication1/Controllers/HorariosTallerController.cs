@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
@@ -16,7 +17,9 @@ namespace WebApplication1.Controllers
 
         // ==========================================
         // LISTAR TODOS LOS HORARIOS
+        // PÚBLICO
         // ==========================================
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var horarios = await _context.HorariosTaller
@@ -29,105 +32,10 @@ namespace WebApplication1.Controllers
         }
 
         // ==========================================
-        // ABRIR FORMULARIO PARA CREAR
-        // ==========================================
-        public async Task<IActionResult> Create()
-        {
-            ViewBag.Talleres = await _context.Talleres
-                .OrderBy(t => t.nombre)
-                .ToListAsync();
-
-            return View();
-        }
-
-        // ==========================================
-        // GUARDAR NUEVO HORARIO
-        // ==========================================
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(HorarioTaller horario)
-        {
-            // Comprobar que el taller exista
-            bool tallerExiste = await _context.Talleres
-                .AnyAsync(t => t.id == horario.tallerId);
-
-            if (!tallerExiste)
-            {
-                ModelState.AddModelError(
-                    "tallerId",
-                    "El taller seleccionado no existe."
-                );
-            }
-
-            // La hora final debe ser posterior a la inicial
-            if (horario.horaFin <= horario.horaInicio)
-            {
-                ModelState.AddModelError(
-                    "horaFin",
-                    "La hora de finalización debe ser posterior a la hora de inicio."
-                );
-            }
-
-            // Cupo matutino válido
-            if (horario.CupoMatutino < 0)
-            {
-                ModelState.AddModelError(
-                    "CupoMatutino",
-                    "El cupo matutino no puede ser negativo."
-                );
-            }
-
-            // Cupo vespertino válido
-            if (horario.CupoVespertino < 0)
-            {
-                ModelState.AddModelError(
-                    "CupoVespertino",
-                    "El cupo vespertino no puede ser negativo."
-                );
-            }
-
-            // Evitar que dos talleres utilicen
-            // el mismo espacio al mismo tiempo
-            bool espacioOcupado = await _context.HorariosTaller
-                .AnyAsync(h =>
-                    h.fecha == horario.fecha &&
-                    h.Espacio == horario.Espacio &&
-                    horario.horaInicio < h.horaFin &&
-                    horario.horaFin > h.horaInicio
-                );
-
-            if (espacioOcupado)
-            {
-                ModelState.AddModelError(
-                    "Espacio",
-                    "Este espacio ya está ocupado por otro taller en ese horario."
-                );
-            }
-
-            // Si todo está correcto, guardar
-            if (ModelState.IsValid)
-            {
-                _context.HorariosTaller.Add(horario);
-
-                await _context.SaveChangesAsync();
-
-                TempData["Exito"] =
-                    "Horario creado correctamente.";
-
-                return RedirectToAction(nameof(Index));
-            }
-
-            // Si hubo errores, volver a cargar talleres
-            ViewBag.Talleres = await _context.Talleres
-                .OrderBy(t => t.nombre)
-                .ToListAsync();
-
-            return View(horario);
-        }
-
-        // ==========================================
         // VER DETALLES
+        // PÚBLICO
         // ==========================================
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -148,8 +56,103 @@ namespace WebApplication1.Controllers
         }
 
         // ==========================================
-        // ABRIR FORMULARIO PARA EDITAR
+        // ABRIR FORMULARIO PARA CREAR
+        // SOLO ADMINISTRADOR
         // ==========================================
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> Create()
+        {
+            ViewBag.Talleres = await _context.Talleres
+                .OrderBy(t => t.nombre)
+                .ToListAsync();
+
+            return View();
+        }
+
+        // ==========================================
+        // GUARDAR NUEVO HORARIO
+        // SOLO ADMINISTRADOR
+        // ==========================================
+        [HttpPost]
+        [Authorize(Roles = "Administrador")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(HorarioTaller horario)
+        {
+            bool tallerExiste = await _context.Talleres
+                .AnyAsync(t => t.id == horario.tallerId);
+
+            if (!tallerExiste)
+            {
+                ModelState.AddModelError(
+                    "tallerId",
+                    "El taller seleccionado no existe."
+                );
+            }
+
+            if (horario.horaFin <= horario.horaInicio)
+            {
+                ModelState.AddModelError(
+                    "horaFin",
+                    "La hora de finalización debe ser posterior a la hora de inicio."
+                );
+            }
+
+            if (horario.CupoMatutino < 0)
+            {
+                ModelState.AddModelError(
+                    "CupoMatutino",
+                    "El cupo matutino no puede ser negativo."
+                );
+            }
+
+            if (horario.CupoVespertino < 0)
+            {
+                ModelState.AddModelError(
+                    "CupoVespertino",
+                    "El cupo vespertino no puede ser negativo."
+                );
+            }
+
+            bool espacioOcupado = await _context.HorariosTaller
+                .AnyAsync(h =>
+                    h.fecha == horario.fecha &&
+                    h.Espacio == horario.Espacio &&
+                    horario.horaInicio < h.horaFin &&
+                    horario.horaFin > h.horaInicio
+                );
+
+            if (espacioOcupado)
+            {
+                ModelState.AddModelError(
+                    "Espacio",
+                    "Este espacio ya está ocupado por otro taller en ese horario."
+                );
+            }
+
+            if (ModelState.IsValid)
+            {
+                _context.HorariosTaller.Add(horario);
+
+                await _context.SaveChangesAsync();
+
+                TempData["Exito"] =
+                    "Horario creado correctamente.";
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewBag.Talleres = await _context.Talleres
+                .OrderBy(t => t.nombre)
+                .ToListAsync();
+
+            return View(horario);
+        }
+
+        // ==========================================
+        // ABRIR FORMULARIO PARA EDITAR
+        // SOLO ADMINISTRADOR
+        // ==========================================
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -174,8 +177,10 @@ namespace WebApplication1.Controllers
 
         // ==========================================
         // GUARDAR EDICIÓN
+        // SOLO ADMINISTRADOR
         // ==========================================
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
             int id,
@@ -186,7 +191,6 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            // Comprobar que el taller exista
             bool tallerExiste = await _context.Talleres
                 .AnyAsync(t => t.id == horario.tallerId);
 
@@ -198,7 +202,6 @@ namespace WebApplication1.Controllers
                 );
             }
 
-            // Validar horas
             if (horario.horaFin <= horario.horaInicio)
             {
                 ModelState.AddModelError(
@@ -207,7 +210,6 @@ namespace WebApplication1.Controllers
                 );
             }
 
-            // Validar cupo matutino
             if (horario.CupoMatutino < 0)
             {
                 ModelState.AddModelError(
@@ -216,7 +218,6 @@ namespace WebApplication1.Controllers
                 );
             }
 
-            // Validar cupo vespertino
             if (horario.CupoVespertino < 0)
             {
                 ModelState.AddModelError(
@@ -225,8 +226,6 @@ namespace WebApplication1.Controllers
                 );
             }
 
-            // Evitar choques de espacio.
-            // h.id != horario.id sirve para no compararlo consigo mismo.
             bool espacioOcupado = await _context.HorariosTaller
                 .AnyAsync(h =>
                     h.id != horario.id &&
@@ -271,7 +270,6 @@ namespace WebApplication1.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Si hay errores, volver a cargar talleres
             ViewBag.Talleres = await _context.Talleres
                 .OrderBy(t => t.nombre)
                 .ToListAsync();
@@ -281,7 +279,9 @@ namespace WebApplication1.Controllers
 
         // ==========================================
         // ABRIR CONFIRMACIÓN PARA ELIMINAR
+        // SOLO ADMINISTRADOR
         // ==========================================
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -303,12 +303,13 @@ namespace WebApplication1.Controllers
 
         // ==========================================
         // ELIMINAR HORARIO
+        // SOLO ADMINISTRADOR
         // ==========================================
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Administrador")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            // Verificar si existen inscripciones
             bool tieneInscripciones = await _context.Inscripciones
                 .AnyAsync(i => i.horarioTallerId == id);
 
