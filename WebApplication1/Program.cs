@@ -43,8 +43,13 @@ app.MapControllerRoute(
     .WithStaticAssets();
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider
-        .GetRequiredService<RoleManager<IdentityRole>>();
+    var services = scope.ServiceProvider;
+
+    var roleManager =
+        services.GetRequiredService<RoleManager<IdentityRole>>();
+
+    var userManager =
+        services.GetRequiredService<UserManager<IdentityUser>>();
 
     string[] roles =
     {
@@ -58,7 +63,46 @@ using (var scope = app.Services.CreateScope())
     {
         if (!await roleManager.RoleExistsAsync(role))
         {
-            await roleManager.CreateAsync(new IdentityRole(role));
+            await roleManager.CreateAsync(
+                new IdentityRole(role)
+            );
+        }
+    }
+
+    var adminEmail =
+        builder.Configuration["DemoAdmin:Email"];
+
+    var adminPassword =
+        builder.Configuration["DemoAdmin:Password"];
+
+    if (!string.IsNullOrEmpty(adminEmail) &&
+        !string.IsNullOrEmpty(adminPassword))
+    {
+        var adminUser =
+            await userManager.FindByEmailAsync(adminEmail);
+
+        if (adminUser == null)
+        {
+            adminUser = new IdentityUser
+            {
+                UserName = adminEmail,
+                Email = adminEmail,
+                EmailConfirmed = true
+            };
+
+            var result =
+                await userManager.CreateAsync(
+                    adminUser,
+                    adminPassword
+                );
+
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(
+                    adminUser,
+                    "Administrador"
+                );
+            }
         }
     }
 }
