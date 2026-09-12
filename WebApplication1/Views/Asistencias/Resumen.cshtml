@@ -1,0 +1,110 @@
+﻿@{
+    ViewData["Title"] = "Resumen de asistencia";
+
+    int total = ViewBag.TotalRegistros ?? 0;
+    int presentes = ViewBag.Presentes ?? 0;
+    int ausentes = ViewBag.Ausentes ?? 0;
+
+    double porcentaje =
+        total > 0
+            ? ((double)presentes / total) * 100
+            : 0;
+}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h1>
+            <i class="bi bi-bar-chart"></i>
+            Resumen de asistencia
+        </h1>
+
+        <a asp-action="Index"
+           class="btn btn-outline-primary">
+            Ver registros
+        </a>
+
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 text-center">
+
+                <div class="card-body">
+
+                    <h2>
+                        @total
+                    </h2>
+
+                    <p class="mb-0">
+                        Registros
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 text-center">
+
+                <div class="card-body">
+
+                    <h2 class="text-success">
+                        @presentes
+                    </h2>
+
+                    <p class="mb-0">
+                        Presentes
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 text-center">
+
+                <div class="card-body">
+
+                    <h2 class="text-danger">
+                        @ausentes
+                    </h2>
+
+                    <p class="mb-0">
+                        Ausentes
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card shadow-sm border-0 mt-4">
+
+        <div class="card-body text-center">
+
+            <h4>
+                Porcentaje de asistencia
+            </h4>
+
+            <div class="display-4 fw-bold text-success">
+                @porcentaje.ToString("0.0")%
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

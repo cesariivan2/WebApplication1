@@ -1,0 +1,185 @@
+﻿@model PropuestaComite
+
+@{
+    ViewData["Title"] = "Resultados";
+
+    int aFavor = ViewBag.AFavor ?? 0;
+    int enContra = ViewBag.EnContra ?? 0;
+    int abstenciones = ViewBag.Abstenciones ?? 0;
+    int total = ViewBag.Total ?? 0;
+
+    double porcentajeAFavor =
+        total > 0
+            ? ((double)aFavor / total) * 100
+            : 0;
+
+    double porcentajeEnContra =
+        total > 0
+            ? ((double)enContra / total) * 100
+            : 0;
+
+    double porcentajeAbstencion =
+        total > 0
+            ? ((double)abstenciones / total) * 100
+            : 0;
+}
+
+<div class="container py-4"
+     style="max-width: 900px;">
+
+    <a asp-controller="PropuestasComite"
+       asp-action="Index"
+       class="btn btn-link ps-0 mb-3">
+
+        <i class="bi bi-arrow-left"></i>
+        Volver
+    </a>
+
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body p-4">
+
+            <h1>
+                <i class="bi bi-bar-chart"></i>
+                Resultados
+            </h1>
+
+            <h4 class="text-muted">
+                @Model.Titulo
+            </h4>
+
+            <p>
+                @Model.Descripcion
+            </p>
+
+
+            <div class="mt-3">
+
+                @if (Model.Estado == "Abierta")
+                {
+                    <span class="badge bg-success">
+                        Votación abierta
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">
+                        Votación cerrada
+                    </span>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 text-center h-100">
+
+                <div class="card-body">
+
+                    <i class="bi bi-hand-thumbs-up
+                              fs-1 text-success">
+                    </i>
+
+                    <h2 class="mt-2">
+                        @aFavor
+                    </h2>
+
+                    <p>
+                        A favor
+                    </p>
+
+                    <strong>
+                        @porcentajeAFavor.ToString("0.0")%
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 text-center h-100">
+
+                <div class="card-body">
+
+                    <i class="bi bi-hand-thumbs-down
+                              fs-1 text-danger">
+                    </i>
+
+                    <h2 class="mt-2">
+                        @enContra
+                    </h2>
+
+                    <p>
+                        En contra
+                    </p>
+
+                    <strong>
+                        @porcentajeEnContra.ToString("0.0")%
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 text-center h-100">
+
+                <div class="card-body">
+
+                    <i class="bi bi-dash-circle fs-1">
+                    </i>
+
+                    <h2 class="mt-2">
+                        @abstenciones
+                    </h2>
+
+                    <p>
+                        Abstenciones
+                    </p>
+
+                    <strong>
+                        @porcentajeAbstencion.ToString("0.0")%
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body text-center">
+            
+            <h3>
+                Total de votos
+            </h3>
+
+            <div class="display-4 fw-bold">
+                @total
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

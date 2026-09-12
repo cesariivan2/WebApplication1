@@ -1,0 +1,188 @@
+﻿@model TorneoVideojuego
+
+@{
+    ViewData["Title"] = "Editar torneo";
+}
+
+<div class="container py-4"
+     style="max-width: 800px;">
+
+    <a asp-action="Details"
+       asp-route-id="@Model.Id"
+       class="btn btn-link ps-0 mb-3">
+
+        <i class="bi bi-arrow-left"></i>
+        Volver
+    </a>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <h1 class="mb-4">
+                <i class="bi bi-pencil"></i>
+                Editar torneo
+            </h1>
+
+
+            <form asp-action="Edit"
+                  asp-route-id="@Model.Id"
+                  method="post">
+
+                <input asp-for="Id"
+                       type="hidden" />
+
+
+                <div asp-validation-summary="ModelOnly"
+                     class="alert alert-danger">
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label asp-for="Nombre"
+                           class="form-label">
+                        Nombre
+                    </label>
+
+                    <input asp-for="Nombre"
+                           class="form-control" />
+
+                    <span asp-validation-for="Nombre"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label asp-for="Videojuego"
+                           class="form-label">
+                        Videojuego
+                    </label>
+
+                    <input asp-for="Videojuego"
+                           class="form-control" />
+
+                    <span asp-validation-for="Videojuego"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Plataforma"
+                               class="form-label">
+                            Plataforma
+                        </label>
+
+                        <input asp-for="Plataforma"
+                               class="form-control" />
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Formato"
+                               class="form-label">
+                            Formato
+                        </label>
+
+                        <input asp-for="Formato"
+                               class="form-control" />
+
+                    </div>
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label asp-for="Lugar"
+                           class="form-label">
+                        Lugar
+                    </label>
+
+                    <input asp-for="Lugar"
+                           class="form-control" />
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label asp-for="CupoMaximo"
+                           class="form-label">
+                        Cupo máximo
+                    </label>
+
+                    <input asp-for="CupoMaximo"
+                           type="number"
+                           min="2"
+                           max="256"
+                           class="form-control" />
+
+                    <span asp-validation-for="CupoMaximo"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="FechaInicio"
+                               class="form-label">
+                            Inicio
+                        </label>
+
+                        <input asp-for="FechaInicio"
+                               type="datetime-local"
+                               class="form-control" />
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="FechaFin"
+                               class="form-label">
+                            Finalización
+                        </label>
+
+                        <input asp-for="FechaFin"
+                               type="datetime-local"
+                               class="form-control" />
+
+                    </div>
+
+                </div>
+
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    <i class="bi bi-save"></i>
+                    Guardar cambios
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

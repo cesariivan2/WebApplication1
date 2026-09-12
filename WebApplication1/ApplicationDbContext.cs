@@ -12,6 +12,7 @@ namespace WebApplication1.Data
             : base(options)
         {
         }
+        public DbSet<EventoDataCode> EventosDataCode { get; set; }
         public DbSet<PropuestaComite> PropuestasComite { get; set; }
 
         public DbSet<VotoPropuesta> VotosPropuesta { get; set; }
@@ -55,7 +56,9 @@ namespace WebApplication1.Data
 
 
 
-
+            builder.Entity<EventoDataCode>()
+    .Property(e => e.Costo)
+    .HasPrecision(10, 2);
             builder.Entity<Asistencia>()
             .HasOne(a => a.Inscripcion)
             .WithOne()
@@ -124,7 +127,7 @@ namespace WebApplication1.Data
                 .WithMany()
                 .HasForeignKey(p => p.GanadorId)
                 .OnDelete(DeleteBehavior.NoAction);
-
+    
         }
     }
 }

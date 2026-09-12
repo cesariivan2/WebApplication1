@@ -1,82 +1,164 @@
-﻿@using Microsoft.AspNetCore.Mvc.Rendering
+﻿@{
+    ViewData["Title"] =
+        "Nueva inscripción";
 
-@{
-    ViewData["Title"] = "Nueva inscripción";
+    var alumnos =
+        ViewBag.Alumnos
+        as IEnumerable<WebApplication1.Models.Alumno>;
 
-    var alumnos = ViewBag.Alumnos as IEnumerable<WebApplication1.Models.Alumno>;
-    var horarios = ViewBag.Horarios as IEnumerable<WebApplication1.Models.HorarioTaller>;
+    var horarios =
+        ViewBag.Horarios
+        as IEnumerable<WebApplication1.Models.HorarioTaller>;
 }
 
-<div class="registration-page">
+<div class="container py-4"
+     style="max-width: 850px;">
 
-    <a asp-controller="Talleres"
+    <a asp-controller="Inscripciones"
        asp-action="Index"
-       class="back-link">
+       class="btn btn-link ps-0 mb-3">
+
         <i class="bi bi-arrow-left"></i>
-        Volver a talleres
+        Volver a inscripciones
+
     </a>
 
-    <div class="registration-card">
 
-        <div class="registration-header">
-            <span class="detail-badge">DATA CODE 2.0</span>
+    <div class="card shadow-sm border-0">
 
-            <h1>Inscripción a taller</h1>
+        <div class="card-body p-4">
 
-            <p>
-                Selecciona un alumno y uno de los horarios disponibles.
+            <h1 class="mb-2">
+
+                <i class="bi bi-plus-circle"></i>
+                Nueva inscripción
+
+            </h1>
+
+
+            <p class="text-muted mb-4">
+
+                Selecciona el taller y horario.
+                El sistema validará cupo y conflictos
+                automáticamente.
+
             </p>
-        </div>
 
-        <div class="registration-body">
 
             @if (TempData["Error"] != null)
             {
                 <div class="alert alert-danger">
+
                     <i class="bi bi-exclamation-triangle-fill"></i>
+
                     @TempData["Error"]
+
                 </div>
             }
+
 
             <form asp-controller="Inscripciones"
                   asp-action="Create"
                   method="post">
 
-                <div class="mb-4">
 
-                    <label class="form-label">
-                        <i class="bi bi-person"></i>
-                        Alumno
-                    </label>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <div class="mb-4">
 
-                    <select name="alumnoId"
-                            class="form-select"
-                            required>
+                        <label class="form-label">
 
-                        <option value="">
-                            Selecciona un alumno
-                        </option>
+                            <i class="bi bi-person"></i>
+                            Alumno
 
-                        @if (alumnos != null)
-                        {
-                            foreach (var alumno in alumnos)
+                        </label>
+
+
+                        <select name="alumnoId"
+                                class="form-select"
+                                required>
+
+                            <option value="">
+                                Selecciona un alumno
+                            </option>
+
+
+                            @if (alumnos != null)
                             {
-                                <option value="@alumno.Id">
-                                    @alumno.Nombre - @alumno.Matricula - @alumno.Turno
-                                </option>
+                                foreach (var alumno in alumnos)
+                                {
+                                    <option value="@alumno.Id">
+
+                                        @alumno.Nombre
+                                        -
+                                        @alumno.Matricula
+                                        -
+                                        @alumno.Turno
+
+                                    </option>
+                                }
                             }
+
+                        </select>
+
+                    </div>
+                }
+                else
+                {
+                    @if (alumnos != null)
+                    {
+                        var alumnoActual =
+                            alumnos.FirstOrDefault();
+
+                        if (alumnoActual != null)
+                        {
+                            <input type="hidden"
+                                   name="alumnoId"
+                                   value="@alumnoActual.Id" />
+
+
+                            <div class="alert alert-light border">
+
+                                <strong>
+                                    Alumno:
+                                </strong>
+
+                                @alumnoActual.Nombre
+
+                                <br />
+
+
+                                <strong>
+                                    Matrícula:
+                                </strong>
+
+                                @alumnoActual.Matricula
+
+                                <br />
+
+
+                                <strong>
+                                    Turno:
+                                </strong>
+
+                                @alumnoActual.Turno
+
+                            </div>
                         }
+                    }
+                }
 
-                    </select>
-
-                </div>
 
                 <div class="mb-4">
 
                     <label class="form-label">
+
                         <i class="bi bi-calendar-event"></i>
+
                         Taller y horario
+
                     </label>
+
 
                     <select name="horarioTallerId"
                             class="form-select"
@@ -85,6 +167,7 @@
                         <option value="">
                             Selecciona un horario
                         </option>
+
 
                         @if (horarios != null)
                         {
@@ -95,10 +178,23 @@
                                     @horario.Taller?.nombre
 
                                     -
-                                    @horario.fecha.ToString("dd/MM/yyyy")
+
+                                    @horario.fecha
+                                        .ToString("dd/MM/yyyy")
 
                                     -
-                                    @horario.horaInicio.ToString(@"hh\:mm")
+
+                                    @horario.horaInicio
+                                        .ToString("hh\\:mm")
+
+                                    a
+
+                                    @horario.horaFin
+                                        .ToString("hh\\:mm")
+
+                                    -
+
+                                    @horario.Espacio
 
                                 </option>
                             }
@@ -108,24 +204,39 @@
 
                 </div>
 
-                <div class="registration-note">
+
+                <div class="alert alert-info">
 
                     <i class="bi bi-info-circle-fill"></i>
 
-                    <div>
-                        <strong>Importante</strong>
+                    El sistema verificará:
 
-                        <p>
-                            El sistema revisará automáticamente que exista cupo
-                            para el turno del alumno y que no se encuentre
-                            inscrito previamente en el mismo horario.
-                        </p>
-                    </div>
+                    <ul class="mb-0 mt-2">
+
+                        <li>
+                            Cupo según turno.
+                        </li>
+
+                        <li>
+                            Horarios empalmados.
+                        </li>
+
+                        <li>
+                            Inscripciones duplicadas.
+                        </li>
+
+                        <li>
+                            Reactivación si anteriormente
+                            cancelaste este mismo horario.
+                        </li>
+
+                    </ul>
 
                 </div>
 
+
                 <button type="submit"
-                        class="btn btn-register">
+                        class="btn btn-primary">
 
                     <i class="bi bi-check-circle"></i>
                     Confirmar inscripción

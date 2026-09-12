@@ -1,0 +1,195 @@
+﻿@model PartidaTorneo
+
+@{
+    ViewData["Title"] = "Detalle de partida";
+}
+
+<div class="container py-4"
+     style="max-width: 850px;">
+
+    <a asp-action="Index"
+       asp-route-torneoId="@Model.TorneoVideojuegoId"
+       class="btn btn-link ps-0 mb-3">
+
+        <i class="bi bi-arrow-left"></i>
+        Volver a partidas
+    </a>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between">
+
+                <div>
+
+                    <h1>
+                        Partida #@Model.Id
+                    </h1>
+
+                    <h5 class="text-muted">
+                        @Model.TorneoVideojuego?.Nombre
+                    </h5>
+
+                </div>
+
+
+                @if (Model.Estado == "Finalizada")
+                {
+                    <span class="badge bg-success align-self-start">
+                        Finalizada
+                    </span>
+                }
+                else if (Model.Estado == "Programada")
+                {
+                    <span class="badge bg-primary align-self-start">
+                        Programada
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary align-self-start">
+                        Pendiente
+                    </span>
+                }
+
+            </div>
+
+
+            <hr />
+
+
+            <p>
+                <strong>Ronda:</strong>
+                @Model.Ronda
+            </p>
+
+
+            @if (Model.FechaHora.HasValue)
+            {
+                <p>
+                    <strong>Fecha y hora:</strong>
+
+                    @Model.FechaHora.Value
+                        .ToString("dd/MM/yyyy HH:mm")
+                </p>
+            }
+
+
+            <div class="row text-center mt-4">
+
+                <div class="col-md-5">
+
+                    <div class="border rounded p-4">
+
+                        <h4>
+                            @(Model.Participante1?
+                                .Alumno?
+                                .Nombre
+                                ?? "Participante 1")
+                        </h4>
+
+
+                        <p class="text-muted">
+                            @Model.Participante1?
+                                .Alumno?
+                                .Matricula
+                        </p>
+
+
+                        @if (Model.Puntaje1.HasValue)
+                        {
+                            <div class="display-5 fw-bold">
+                                @Model.Puntaje1
+                            </div>
+                        }
+
+
+                        @if (Model.GanadorId ==
+                             Model.Participante1Id)
+                        {
+                            <span class="badge bg-warning
+                                         text-dark mt-2">
+
+                                <i class="bi bi-trophy"></i>
+                                Ganador
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-2
+                            d-flex
+                            align-items-center
+                            justify-content-center">
+
+                    <strong class="fs-3">
+                        VS
+                    </strong>
+
+                </div>
+
+
+                <div class="col-md-5">
+
+                    <div class="border rounded p-4">
+
+                        @if (Model.Participante2 != null)
+                        {
+                            <h4>
+                                @(Model.Participante2
+                                    .Alumno?
+                                    .Nombre
+                                    ?? "Participante 2")
+                            </h4>
+
+                            <p class="text-muted">
+                                @Model.Participante2
+                                    .Alumno?
+                                    .Matricula
+                            </p>
+
+                            @if (Model.Puntaje2.HasValue)
+                            {
+                                <div class="display-5 fw-bold">
+                                    @Model.Puntaje2
+                                </div>
+                            }
+
+                            @if (Model.GanadorId ==
+                                 Model.Participante2Id)
+                            {
+                                <span class="badge bg-warning
+                                             text-dark mt-2">
+
+                                    <i class="bi bi-trophy"></i>
+                                    Ganador
+                                </span>
+                            }
+                        }
+                        else
+                        {
+                            <h4 class="text-muted">
+                                Pase automático
+                            </h4>
+
+                            <p class="mb-0">
+                                Sin rival en esta ronda.
+                            </p>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

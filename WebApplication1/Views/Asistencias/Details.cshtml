@@ -1,0 +1,106 @@
+﻿@model Asistencia
+
+@{
+    ViewData["Title"] = "Detalle de asistencia";
+}
+
+<div class="container py-4"
+     style="max-width: 800px;">
+
+    <a asp-action="Index"
+       class="btn btn-link ps-0 mb-3">
+
+        <i class="bi bi-arrow-left"></i>
+        Volver
+    </a>
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <h1 class="mb-4">
+                Detalle de asistencia
+            </h1>
+
+            <p>
+                <strong>Alumno:</strong>
+                @Model.Inscripcion?.alumno?.Nombre
+            </p>
+
+            <p>
+                <strong>Matrícula:</strong>
+                @Model.Inscripcion?.alumno?.Matricula
+            </p>
+
+            <p>
+                <strong>Turno:</strong>
+                @Model.Inscripcion?.alumno?.Turno
+            </p>
+
+            <p>
+                <strong>Taller:</strong>
+                @Model.Inscripcion?
+                    .horarioTaller?
+                    .Taller?
+                    .nombre
+            </p>
+
+            <p>
+                <strong>Espacio:</strong>
+                @Model.Inscripcion?
+                    .horarioTaller?
+                    .Espacio
+            </p>
+
+            <p>
+                <strong>Estado:</strong>
+
+                @if (Model.Presente)
+                {
+                    <span class="badge bg-success">
+                        Presente
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">
+                        Ausente
+                    </span>
+                }
+            </p>
+
+            <p>
+                <strong>Registro:</strong>
+                @Model.FechaRegistro.ToString("dd/MM/yyyy HH:mm")
+            </p>
+
+            <p>
+                <strong>Observación:</strong>
+
+                @if (string.IsNullOrWhiteSpace(Model.Observacion))
+                {
+                    <span class="text-muted">
+                        Sin observaciones
+                    </span>
+                }
+                else
+                {
+                    @Model.Observacion
+                }
+            </p>
+
+            <hr />
+
+            <a asp-action="Registrar"
+               asp-route-inscripcionId="@Model.InscripcionId"
+               class="btn btn-primary">
+
+                <i class="bi bi-pencil"></i>
+                Modificar asistencia
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

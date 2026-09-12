@@ -1,0 +1,515 @@
+﻿@model IEnumerable<PartidaTorneo>
+
+@{
+    ViewData["Title"] = "Partidas del torneo";
+
+    var torneo =
+        ViewBag.Torneo as TorneoVideojuego;
+
+    var partidas = Model.ToList();
+
+    int rondaActual =
+        partidas.Any()
+            ? partidas.Max(p => p.Ronda)
+            : 0;
+
+    bool todasFinalizadas =
+        partidas.Any() &&
+        partidas
+            .Where(p => p.Ronda == rondaActual)
+            .All(p =>
+                p.Estado == "Finalizada" &&
+                p.GanadorId != null
+            );
+}
+
+<div class="container py-4">
+
+    @if (torneo != null)
+    {
+        <a asp-controller="TorneosVideojuegos"
+           asp-action="Details"
+           asp-route-id="@torneo.Id"
+           class="btn btn-link ps-0 mb-3">
+
+            <i class="bi bi-arrow-left"></i>
+            Volver al torneo
+        </a>
+
+
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between
+                            align-items-start flex-wrap gap-3">
+
+                    <div>
+
+                        <h1>
+                            <i class="bi bi-diagram-3"></i>
+                            Partidas
+                        </h1>
+
+                        <h4 class="text-primary">
+                            @torneo.Nombre
+                        </h4>
+
+                        <p class="text-muted mb-0">
+                            @torneo.Videojuego · @torneo.Formato
+                        </p>
+
+                    </div>
+
+
+                    <div>
+
+                        @if (torneo.Estado == "Abierto")
+                        {
+                            <span class="badge bg-success fs-6">
+                                Abierto
+                            </span>
+                        }
+                        else if (torneo.Estado == "En curso")
+                        {
+                            <span class="badge bg-warning text-dark fs-6">
+                                En curso
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-dark fs-6">
+                                Finalizado
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+
+    @if (TempData["Exito"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Exito"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+
+    @if (User.IsInRole("Administrador") &&
+         torneo != null)
+    {
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-body">
+
+                <h5 class="mb-3">
+                    Administración del torneo
+                </h5>
+
+
+                <div class="d-flex flex-wrap gap-2">
+
+                    @if (!partidas.Any())
+                    {
+                        <form asp-action="GenerarPrimeraRonda"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="torneoId"
+                                   value="@torneo.Id" />
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                <i class="bi bi-shuffle"></i>
+                                Generar primera ronda
+                            </button>
+
+                        </form>
+                    }
+
+
+                    @if (partidas.Any() &&
+                         todasFinalizadas &&
+                         torneo.Estado != "Finalizado")
+                    {
+                        <form asp-action="GenerarSiguienteRonda"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="torneoId"
+                                   value="@torneo.Id" />
+
+                            <button type="submit"
+                                    class="btn btn-success">
+
+                                <i class="bi bi-arrow-right-circle"></i>
+                                Generar siguiente ronda
+                            </button>
+
+                        </form>
+                    }
+
+
+                    @if (torneo.Estado == "Finalizado")
+                    {
+                        <a asp-action="Campeon"
+                           asp-route-torneoId="@torneo.Id"
+                           class="btn btn-warning">
+
+                            <i class="bi bi-trophy"></i>
+                            Ver campeón
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+
+    @if (!partidas.Any())
+    {
+        <div class="alert alert-info">
+
+            Todavía no existen partidas.
+
+            @if (User.IsInRole("Administrador"))
+            {
+                <span>
+                    Genera la primera ronda cuando haya
+                    al menos dos participantes inscritos.
+                </span>
+            }
+
+        </div>
+    }
+    else
+    {
+        var rondas =
+            partidas
+                .GroupBy(p => p.Ronda)
+                .OrderBy(g => g.Key);
+
+
+        @foreach (var grupo in rondas)
+        {
+            <div class="mb-5">
+
+                <h3 class="mb-3">
+                    Ronda @grupo.Key
+                </h3>
+
+
+                <div class="row g-4">
+
+                    @foreach (var partida in grupo)
+                    {
+                        <div class="col-lg-6">
+
+                            <div class="card shadow-sm border-0 h-100">
+
+                                <div class="card-header
+                                            d-flex
+                                            justify-content-between">
+
+                                    <strong>
+                                        Partida #@partida.Id
+                                    </strong>
+
+
+                                    @if (partida.Estado == "Finalizada")
+                                    {
+                                        <span class="badge bg-success">
+                                            Finalizada
+                                        </span>
+                                    }
+                                    else if (partida.Estado == "Programada")
+                                    {
+                                        <span class="badge bg-primary">
+                                            Programada
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">
+                                            Pendiente
+                                        </span>
+                                    }
+
+                                </div>
+
+
+                                <div class="card-body">
+
+                                    <div class="row text-center align-items-center">
+
+                                        <div class="col-5">
+
+                                            <strong class="d-block fs-5">
+
+                                                @(partida.Participante1?
+                                                    .Alumno?
+                                                    .Nombre
+                                                    ?? "Participante 1")
+
+                                            </strong>
+
+
+                                            @if (partida.GanadorId ==
+                                                 partida.Participante1Id)
+                                            {
+                                                <span class="badge bg-warning
+                                                             text-dark mt-2">
+
+                                                    <i class="bi bi-trophy"></i>
+                                                    Ganador
+                                                </span>
+                                            }
+
+                                        </div>
+
+
+                                        <div class="col-2">
+
+                                            <strong>VS</strong>
+
+                                            @if (partida.Puntaje1.HasValue &&
+                                                 partida.Puntaje2.HasValue)
+                                            {
+                                                <div class="fs-4 fw-bold mt-2">
+
+                                                    @partida.Puntaje1
+                                                    -
+                                                    @partida.Puntaje2
+
+                                                </div>
+                                            }
+
+                                        </div>
+
+
+                                        <div class="col-5">
+
+                                            @if (partida.Participante2 != null)
+                                            {
+                                                <strong class="d-block fs-5">
+
+                                                    @(partida.Participante2
+                                                        .Alumno?
+                                                        .Nombre
+                                                        ?? "Participante 2")
+
+                                                </strong>
+
+
+                                                @if (partida.GanadorId ==
+                                                     partida.Participante2Id)
+                                                {
+                                                    <span class="badge bg-warning
+                                                                 text-dark mt-2">
+
+                                                        <i class="bi bi-trophy"></i>
+                                                        Ganador
+                                                    </span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">
+                                                    Pase automático
+                                                </span>
+                                            }
+
+                                        </div>
+
+                                    </div>
+
+
+                                    @if (partida.FechaHora.HasValue)
+                                    {
+                                        <hr />
+
+                                        <p class="text-center mb-0">
+
+                                            <i class="bi bi-calendar-event"></i>
+
+                                            @partida.FechaHora.Value
+                                                .ToString("dd/MM/yyyy HH:mm")
+
+                                        </p>
+                                    }
+
+                                </div>
+
+
+                                <div class="card-footer bg-white">
+
+                                    <div class="d-flex flex-wrap gap-2">
+
+                                        <a asp-action="Details"
+                                           asp-route-id="@partida.Id"
+                                           class="btn btn-sm
+                                                  btn-outline-primary">
+
+                                            Ver detalle
+                                        </a>
+
+
+                                        @if (User.IsInRole("Administrador") &&
+                                             partida.Estado != "Finalizada")
+                                        {
+                                            <button type="button"
+                                                    class="btn btn-sm
+                                                           btn-outline-secondary"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#programar-@partida.Id">
+
+                                                Programar
+                                            </button>
+
+
+                                            @if (partida.Participante2Id != null)
+                                            {
+                                                <button type="button"
+                                                        class="btn btn-sm
+                                                               btn-success"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#resultado-@partida.Id">
+
+                                                    Registrar resultado
+                                                </button>
+                                            }
+                                        }
+
+                                    </div>
+
+
+                                    @if (User.IsInRole("Administrador") &&
+                                         partida.Estado != "Finalizada")
+                                    {
+                                        <div class="collapse mt-3"
+                                             id="programar-@partida.Id">
+
+                                            <form asp-action="Programar"
+                                                  method="post"
+                                                  class="border rounded p-3">
+
+                                                <input type="hidden"
+                                                       name="id"
+                                                       value="@partida.Id" />
+
+
+                                                <label class="form-label">
+                                                    Fecha y hora
+                                                </label>
+
+
+                                                <input type="datetime-local"
+                                                       name="fechaHora"
+                                                       class="form-control mb-2"
+                                                       required />
+
+
+                                                <button type="submit"
+                                                        class="btn btn-primary
+                                                               btn-sm">
+
+                                                    Guardar programación
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+
+
+                                        @if (partida.Participante2Id != null)
+                                        {
+                                            <div class="collapse mt-3"
+                                                 id="resultado-@partida.Id">
+
+                                                <form asp-action="RegistrarResultado"
+                                                      method="post"
+                                                      class="border rounded p-3">
+
+                                                    <input type="hidden"
+                                                           name="id"
+                                                           value="@partida.Id" />
+
+
+                                                    <div class="row">
+
+                                                        <div class="col-6">
+
+                                                            <label class="form-label">
+                                                                Puntaje 1
+                                                            </label>
+
+                                                            <input type="number"
+                                                                   name="puntaje1"
+                                                                   min="0"
+                                                                   class="form-control"
+                                                                   required />
+
+                                                        </div>
+
+
+                                                        <div class="col-6">
+
+                                                            <label class="form-label">
+                                                                Puntaje 2
+                                                            </label>
+
+                                                            <input type="number"
+                                                                   name="puntaje2"
+                                                                   min="0"
+                                                                   class="form-control"
+                                                                   required />
+
+                                                        </div>
+
+                                                    </div>
+
+
+                                                    <button type="submit"
+                                                            class="btn btn-success
+                                                                   btn-sm mt-3">
+
+                                                        Guardar resultado
+                                                    </button>
+
+                                                </form>
+
+                                            </div>
+                                        }
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+        }
+    }
+
+</div>

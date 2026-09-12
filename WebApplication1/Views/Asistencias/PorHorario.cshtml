@@ -1,0 +1,188 @@
+﻿@model IEnumerable<Inscripcion>
+
+@{
+    ViewData["Title"] = "Asistencia por horario";
+
+    var horario =
+        ViewBag.Horario as HorarioTaller;
+
+    var asistencias =
+        ViewBag.Asistencias as Dictionary<int, Asistencia>
+        ?? new Dictionary<int, Asistencia>();
+}
+
+<div class="container py-4">
+
+    <a asp-controller="Logistica"
+       asp-action="Agenda"
+       class="btn btn-link ps-0 mb-3">
+
+        <i class="bi bi-arrow-left"></i>
+        Volver a agenda
+    </a>
+
+    @if (horario != null)
+    {
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-body">
+
+                <h1>
+                    <i class="bi bi-clipboard-check"></i>
+                    Control de asistencia
+                </h1>
+
+                <h4 class="text-primary">
+                    @horario.Taller?.nombre
+                </h4>
+
+                <div class="row mt-3">
+
+                    <div class="col-md-3">
+                        <strong>Fecha</strong>
+                        <div>
+                            @horario.fecha.ToString("dd/MM/yyyy")
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Horario</strong>
+                        <div>
+                            @horario.horaInicio.ToString(@"hh\:mm")
+                            -
+                            @horario.horaFin.ToString(@"hh\:mm")
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Espacio</strong>
+                        <div>
+                            @horario.Espacio
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <strong>Instructor</strong>
+                        <div>
+                            @horario.Taller?.instructor
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+    @if (TempData["Exito"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Exito"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No hay alumnos confirmados en este horario.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead>
+                    <tr>
+                        <th>Alumno</th>
+                        <th>Matrícula</th>
+                        <th>Turno</th>
+                        <th>Asistencia</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var inscripcion in Model)
+                    {
+                        var tieneAsistencia =
+                            asistencias.TryGetValue(
+                                inscripcion.id,
+                                out var asistencia
+                            );
+
+                        <tr>
+                            <td>
+                                @inscripcion.alumno?.Nombre
+                            </td>
+
+                            <td>
+                                @inscripcion.alumno?.Matricula
+                            </td>
+
+                            <td>
+                                @inscripcion.alumno?.Turno
+                            </td>
+
+                            <td>
+                                @if (!tieneAsistencia)
+                                {
+                                    <span class="badge bg-secondary">
+                                        Sin registrar
+                                    </span>
+                                }
+                                else if (asistencia!.Presente)
+                                {
+                                    <span class="badge bg-success">
+                                        Presente
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">
+                                        Ausente
+                                    </span>
+                                }
+                            </td>
+
+                            <td>
+                                <a asp-action="Registrar"
+                                   asp-route-inscripcionId="@inscripcion.id"
+                                   class="btn btn-sm btn-primary">
+
+                                    @(tieneAsistencia
+                                        ? "Modificar"
+                                        : "Registrar")
+                                </a>
+
+                                @if (tieneAsistencia)
+                                {
+                                    <a asp-action="Details"
+                                       asp-route-id="@asistencia!.Id"
+                                       class="btn btn-sm btn-outline-secondary">
+
+                                        Detalle
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+
+</div>

@@ -1,0 +1,199 @@
+﻿@model WebApplication1.Models.Inscripcion
+
+@{
+    ViewData["Title"] = "Detalle de inscripción";
+}
+
+<div class="container py-4"
+     style="max-width: 850px;">
+
+    <a asp-controller="Inscripciones"
+       asp-action="Index"
+       class="btn btn-link ps-0 mb-3">
+
+        <i class="bi bi-arrow-left"></i>
+        Volver a inscripciones
+    </a>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between align-items-start mb-4">
+
+                <div>
+                    <h1>
+                        Detalle de inscripción
+                    </h1>
+
+                    <p class="text-muted mb-0">
+                        DATA CODE 2.0
+                    </p>
+                </div>
+
+
+                @if (Model.estado == "Confirmada")
+                {
+                    <span class="badge bg-success fs-6">
+
+                        <i class="bi bi-check-circle"></i>
+                        Confirmada
+
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-danger fs-6">
+
+                        <i class="bi bi-x-circle"></i>
+                        @Model.estado
+
+                    </span>
+                }
+
+            </div>
+
+
+            <hr />
+
+
+            <!-- ======================================
+                 DATOS DEL ALUMNO
+            ======================================= -->
+
+            <h4 class="mb-3">
+                Alumno
+            </h4>
+
+
+            <div class="row mb-4">
+
+                <div class="col-md-6">
+
+                    <p>
+                        <strong>Nombre:</strong>
+                        @(Model.alumno?.Nombre ?? "Sin alumno")
+                    </p>
+
+
+                    <p>
+                        <strong>Matrícula:</strong>
+                        @(Model.alumno?.Matricula ?? "")
+                    </p>
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <p>
+                        <strong>Correo:</strong>
+                        @(Model.alumno?.Correo ?? "")
+                    </p>
+
+
+                    <p>
+                        <strong>Turno:</strong>
+                        @(Model.alumno?.Turno ?? "")
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ======================================
+                 DATOS DEL TALLER
+            ======================================= -->
+
+            <h4 class="mb-3">
+                Taller
+            </h4>
+
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <p>
+                        <strong>Taller:</strong>
+                        @(Model.horarioTaller?.Taller?.nombre ?? "Sin taller")
+                    </p>
+
+
+                    <p>
+                        <strong>Instructor:</strong>
+                        @(Model.horarioTaller?.Taller?.instructor ?? "Sin asignar")
+                    </p>
+
+
+                    <p>
+                        <strong>Espacio:</strong>
+                        @(Model.horarioTaller?.Espacio ?? "Sin asignar")
+                    </p>
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    @if (Model.horarioTaller != null)
+                    {
+                        <p>
+                            <strong>Fecha:</strong>
+
+                            @(Model.horarioTaller.fecha.ToString("dd/MM/yyyy"))
+                        </p>
+
+
+                        <p>
+                            <strong>Horario:</strong>
+
+                            @(Model.horarioTaller.horaInicio.ToString("hh\\:mm"))
+
+                            -
+
+                            @(Model.horarioTaller.horaFin.ToString("hh\\:mm"))
+                        </p>
+                    }
+
+
+                    <p>
+                        <strong>Inscripción realizada:</strong>
+
+                        @(Model.FechaInscripcion.ToString("dd/MM/yyyy HH:mm"))
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            @if (Model.estado == "Confirmada")
+            {
+                <hr />
+
+
+                <form asp-controller="Inscripciones"
+                      asp-action="Cancelar"
+                      asp-route-id="@Model.id"
+                      method="post">
+
+                    <button type="submit"
+                            class="btn btn-outline-danger"
+                            onclick="return confirm('¿Seguro que deseas cancelar esta inscripción?');">
+
+                        <i class="bi bi-x-circle"></i>
+                        Cancelar inscripción
+
+                    </button>
+
+                </form>
+            }
+
+        </div>
+
+    </div>
+
+</div>

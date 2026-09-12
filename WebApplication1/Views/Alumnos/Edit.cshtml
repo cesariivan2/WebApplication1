@@ -1,0 +1,120 @@
+﻿@model WebApplication1.Models.Alumno
+
+@{
+    ViewData["Title"] = "Editar alumno";
+}
+
+<div class="registration-page">
+
+    <a asp-controller="Alumnos"
+       asp-action="Index"
+       class="back-link">
+
+        <i class="bi bi-arrow-left"></i>
+        Volver a alumnos
+
+    </a>
+
+    <div class="registration-card">
+
+        <div class="registration-header">
+
+            <span class="detail-badge">
+                DATA CODE 2.0
+            </span>
+
+            <h1>Editar alumno</h1>
+
+            <p>
+                Modifica la información del alumno.
+            </p>
+
+        </div>
+
+        <div class="registration-body">
+
+            <form asp-action="Edit"
+                  method="post">
+
+                <input type="hidden"
+                       asp-for="Id" />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Nombre"
+                           class="form-label">
+                        Nombre
+                    </label>
+
+                    <input asp-for="Nombre"
+                           class="form-control" />
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Matricula"
+                           class="form-label">
+                        Matrícula
+                    </label>
+
+                    <input asp-for="Matricula"
+                           class="form-control" />
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Correo"
+                           class="form-label">
+                        Correo
+                    </label>
+
+                   <input asp-for="Correo"
+       type="email"
+       class="form-control"
+       readonly />
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label asp-for="Turno"
+                           class="form-label">
+                        Turno
+                    </label>
+
+                    <select asp-for="Turno"
+                            class="form-select">
+
+                        <option value="Matutino">
+                            Matutino
+                        </option>
+
+                        <option value="Vespertino">
+                            Vespertino
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <button type="submit"
+                        class="btn btn-register">
+
+                    <i class="bi bi-save"></i>
+                    Guardar cambios
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

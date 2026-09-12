@@ -1,0 +1,123 @@
+﻿@model IEnumerable<Inscripcion>
+
+@{
+    ViewData["Title"] = "Participantes";
+
+    var horario =
+        ViewBag.Horario as HorarioTaller;
+}
+
+<div class="container py-4">
+
+    <a asp-action="Agenda"
+       class="btn btn-link ps-0 mb-3">
+
+        <i class="bi bi-arrow-left"></i>
+        Volver a agenda
+    </a>
+
+    @if (horario != null)
+    {
+        <div class="card shadow-sm border-0 mb-4">
+
+            <div class="card-body">
+
+                <h1>
+                    Participantes
+                </h1>
+
+                <h4 class="text-primary">
+                    @horario.Taller?.nombre
+                </h4>
+
+                <p class="mb-0">
+                    @horario.fecha.ToString("dd/MM/yyyy")
+                    ·
+                    @horario.horaInicio.ToString(@"hh\:mm")
+                    -
+                    @horario.horaFin.ToString(@"hh\:mm")
+                    ·
+                    @horario.Espacio
+                </p>
+
+            </div>
+
+        </div>
+    }
+
+    <div class="mb-3">
+
+        @if (horario != null)
+        {
+            <a asp-controller="Asistencias"
+               asp-action="PorHorario"
+               asp-route-id="@horario.id"
+               class="btn btn-success">
+
+                <i class="bi bi-clipboard-check"></i>
+                Tomar asistencia
+            </a>
+        }
+
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No hay participantes confirmados.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+
+            <table class="table table-hover">
+
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Matrícula</th>
+                        <th>Correo</th>
+                        <th>Turno</th>
+                        <th>Fecha inscripción</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var inscripcion in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @inscripcion.alumno?.Nombre
+                            </td>
+
+                            <td>
+                                @inscripcion.alumno?.Matricula
+                            </td>
+
+                            <td>
+                                @inscripcion.alumno?.Correo
+                            </td>
+
+                            <td>
+                                @inscripcion.alumno?.Turno
+                            </td>
+
+                            <td>
+                                @inscripcion.FechaInscripcion
+                                    .ToString("dd/MM/yyyy HH:mm")
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+
+</div>

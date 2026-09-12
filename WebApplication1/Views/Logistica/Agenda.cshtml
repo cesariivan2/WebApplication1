@@ -1,0 +1,132 @@
+﻿@model IEnumerable<HorarioTaller>
+
+@{
+    ViewData["Title"] = "Agenda";
+}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h1>
+                <i class="bi bi-calendar-event"></i>
+                Agenda general
+            </h1>
+
+            <p class="text-muted mb-0">
+                Horarios y espacios de talleres
+            </p>
+        </div>
+
+        <div class="d-flex gap-2">
+
+            <a asp-action="Espacios"
+               class="btn btn-outline-primary">
+                Espacios
+            </a>
+
+            <a asp-action="Resumen"
+               class="btn btn-dark">
+                Resumen
+            </a>
+
+        </div>
+
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No hay horarios registrados.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Taller</th>
+                        <th>Horario</th>
+                        <th>Espacio</th>
+                        <th>Cupos</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var horario in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @horario.fecha.ToString("dd/MM/yyyy")
+                            </td>
+
+                            <td>
+                                <strong>
+                                    @horario.Taller?.nombre
+                                </strong>
+
+                                <div class="small text-muted">
+                                    @horario.Taller?.instructor
+                                </div>
+                            </td>
+
+                            <td>
+                                @horario.horaInicio.ToString(@"hh\:mm")
+                                -
+                                @horario.horaFin.ToString(@"hh\:mm")
+                            </td>
+
+                            <td>
+                                @horario.Espacio
+                            </td>
+
+                            <td>
+                                <div>
+                                    M: @horario.CupoMatutino
+                                </div>
+
+                                <div>
+                                    V: @horario.CupoVespertino
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="d-flex flex-wrap gap-1">
+
+                                    <a asp-action="Participantes"
+                                       asp-route-id="@horario.id"
+                                       class="btn btn-sm btn-outline-primary">
+
+                                        Participantes
+                                    </a>
+
+                                    <a asp-controller="Asistencias"
+                                       asp-action="PorHorario"
+                                       asp-route-id="@horario.id"
+                                       class="btn btn-sm btn-success">
+
+                                        Asistencia
+                                    </a>
+
+                                </div>
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+
+</div>

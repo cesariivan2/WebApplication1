@@ -1,0 +1,202 @@
+﻿@{
+    ViewData["Title"] = "Reportes";
+
+    int alumnos =
+        ViewBag.TotalAlumnos ?? 0;
+
+    int matutinos =
+        ViewBag.AlumnosMatutinos ?? 0;
+
+    int vespertinos =
+        ViewBag.AlumnosVespertinos ?? 0;
+
+    int talleres =
+        ViewBag.TotalTalleres ?? 0;
+
+    int horarios =
+        ViewBag.TotalHorarios ?? 0;
+
+    int inscripciones =
+        ViewBag.TotalInscripciones ?? 0;
+
+    int confirmadas =
+        ViewBag.Confirmadas ?? 0;
+
+    int canceladas =
+        ViewBag.Canceladas ?? 0;
+}
+
+<div class="container py-4">
+
+    <div class="mb-4">
+
+        <h1>
+            <i class="bi bi-bar-chart-line"></i>
+            Reportes
+        </h1>
+
+        <p class="text-muted">
+            Resumen general de DATA CODE 2.0
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Alumnos
+                    </h6>
+
+                    <div class="display-5 fw-bold">
+                        @alumnos
+                    </div>
+
+                    <hr />
+
+                    <p class="mb-1">
+                        Matutino:
+                        <strong>@matutinos</strong>
+                    </p>
+
+                    <p class="mb-0">
+                        Vespertino:
+                        <strong>@vespertinos</strong>
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Talleres
+                    </h6>
+
+                    <div class="display-5 fw-bold">
+                        @talleres
+                    </div>
+
+                    <hr />
+
+                    <p class="mb-0">
+                        Horarios registrados:
+                        <strong>@horarios</strong>
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <h6 class="text-muted">
+                        Inscripciones
+                    </h6>
+
+                    <div class="display-5 fw-bold">
+                        @inscripciones
+                    </div>
+
+                    <hr />
+
+                    <p class="mb-1 text-success">
+                        Confirmadas:
+                        <strong>@confirmadas</strong>
+                    </p>
+
+                    <p class="mb-0 text-danger">
+                        Canceladas:
+                        <strong>@canceladas</strong>
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row g-4 mt-1">
+
+        <div class="col-md-6">
+
+            <a asp-action="Ocupacion"
+               class="text-decoration-none">
+
+                <div class="card shadow-sm border-0 h-100">
+
+                    <div class="card-body">
+
+                        <h4>
+                            <i class="bi bi-people"></i>
+                            Ocupación de talleres
+                        </h4>
+
+                        <p class="text-muted mb-0">
+                            Consulta cupos matutinos,
+                            vespertinos y lugares disponibles.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <div class="col-md-6">
+
+            <a asp-action="Inscripciones"
+               class="text-decoration-none">
+
+                <div class="card shadow-sm border-0 h-100">
+
+                    <div class="card-body">
+
+                        <h4>
+                            <i class="bi bi-card-checklist"></i>
+                            Reporte de inscripciones
+                        </h4>
+
+                        <p class="text-muted mb-0">
+                            Consulta alumnos,
+                            talleres y estado de inscripción.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

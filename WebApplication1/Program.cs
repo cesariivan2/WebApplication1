@@ -1,6 +1,7 @@
 using WebApplication1.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
@@ -8,8 +9,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")
-
     ));
+
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
@@ -20,6 +21,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
+
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
@@ -37,6 +39,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -46,10 +49,25 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
+
+// ==========================================
+// BASE DE DATOS + ROLES + ADMIN + DATOS DEMO
+// ==========================================
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
+    var context =
+        services.GetRequiredService<ApplicationDbContext>();
+
+    // Aplicar automáticamente migraciones pendientes
+    await context.Database.MigrateAsync();
+
+
+    // ==========================================
+    // CREAR ROLES
+    // ==========================================
     var roleManager =
         services.GetRequiredService<RoleManager<IdentityRole>>();
 
@@ -74,11 +92,15 @@ using (var scope = app.Services.CreateScope())
         }
     }
 
+
+    // ==========================================
+    // CREAR ADMIN DEMO
+    // ==========================================
     var adminEmail =
-        builder.Configuration["DemoAdmin:Email"];
+        app.Configuration["DemoAdmin:Email"];
 
     var adminPassword =
-        builder.Configuration["DemoAdmin:Password"];
+        app.Configuration["DemoAdmin:Password"];
 
     if (!string.IsNullOrEmpty(adminEmail) &&
         !string.IsNullOrEmpty(adminPassword))
@@ -101,21 +123,37 @@ using (var scope = app.Services.CreateScope())
                     adminPassword
                 );
 
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                await userManager.AddToRoleAsync(
-                    adminUser,
-                    "Administrador"
+                throw new Exception(
+                    string.Join(
+                        ", ",
+                        result.Errors.Select(
+                            e => e.Description
+                        )
+                    )
                 );
             }
         }
-    }
-}
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider
-        .GetRequiredService<ApplicationDbContext>();
 
+        // Aunque el usuario ya exista,
+        // aseguramos que tenga rol Administrador
+        if (!await userManager.IsInRoleAsync(
+                adminUser,
+                "Administrador"))
+        {
+            await userManager.AddToRoleAsync(
+                adminUser,
+                "Administrador"
+            );
+        }
+    }
+
+
+    // ==========================================
+    // DATOS INICIALES
+    // ==========================================
     await DatosIniciales.Inicializar(context);
 }
+
 app.Run();
