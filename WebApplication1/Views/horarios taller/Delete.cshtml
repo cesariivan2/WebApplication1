@@ -1,0 +1,122 @@
+﻿@model WebApplication1.Models.HorarioTaller
+
+@{
+    ViewData["Title"] = "Eliminar horario";
+}
+
+<div class="registration-page">
+
+    <a asp-controller="HorariosTaller"
+       asp-action="Index"
+       class="back-link">
+
+        <i class="bi bi-arrow-left"></i>
+        Cancelar
+    </a>
+
+    <div class="registration-card">
+
+        <div class="registration-header">
+
+            <span class="detail-badge">
+                DATA CODE 2.0
+            </span>
+
+            <h1>Eliminar horario</h1>
+
+            <p>
+                Confirma que deseas eliminar este horario.
+            </p>
+
+        </div>
+
+        <div class="registration-body">
+
+            <div class="alert alert-warning">
+
+                <i class="bi bi-exclamation-triangle-fill"></i>
+
+                Esta acción no se puede deshacer.
+
+            </div>
+
+            <div class="schedule-row">
+
+                <i class="bi bi-book"></i>
+
+                <div>
+                    <small>Taller</small>
+
+                    <strong>
+                        @(Model.Taller?.nombre ?? "Sin taller")
+                    </strong>
+                </div>
+
+            </div>
+
+            <div class="schedule-row">
+
+                <i class="bi bi-calendar3"></i>
+
+                <div>
+                    <small>Fecha</small>
+
+                    <strong>
+                        @Model.fecha.ToString("dd/MM/yyyy")
+                    </strong>
+                </div>
+
+            </div>
+
+            <div class="schedule-row">
+
+                <i class="bi bi-clock"></i>
+
+                <div>
+                    <small>Horario</small>
+
+                    <strong>
+                        @Model.horaInicio.ToString(@"hh\:mm")
+                        -
+                        @Model.horaFin.ToString(@"hh\:mm")
+                    </strong>
+                </div>
+
+            </div>
+
+            <div class="schedule-row">
+
+                <i class="bi bi-geo-alt"></i>
+
+                <div>
+                    <small>Espacio</small>
+
+                    <strong>
+                        @Model.Espacio
+                    </strong>
+                </div>
+
+            </div>
+
+            <form asp-controller="HorariosTaller"
+                  asp-action="Delete"
+                  method="post">
+
+                <input type="hidden"
+                       asp-for="id" />
+
+                <button type="submit"
+                        class="btn btn-danger w-100">
+
+                    <i class="bi bi-trash"></i>
+                    Sí, eliminar horario
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

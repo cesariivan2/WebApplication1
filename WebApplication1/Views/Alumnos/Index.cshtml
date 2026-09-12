@@ -1,0 +1,119 @@
+﻿@model IEnumerable<WebApplication1.Models.Alumno>
+
+@{
+    ViewData["Title"] = "Alumnos";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h1 class="fw-bold mb-1">
+            Alumnos
+        </h1>
+
+        <p class="text-muted mb-0">
+            Consulta los alumnos registrados en DATA CODE 2.0.
+        </p>
+    </div>
+
+    <a asp-controller="Alumnos"
+       asp-action="Create"
+       class="btn btn-datacode">
+
+        <i class="bi bi-person-plus"></i>
+        Nuevo alumno
+
+    </a>
+
+</div>
+
+
+@if (!Model.Any())
+{
+    <div class="empty-state">
+
+        <i class="bi bi-people"></i>
+
+        <h3>No hay alumnos registrados</h3>
+
+        <p>
+            Registra al primer alumno para comenzar.
+        </p>
+
+        <a asp-controller="Alumnos"
+           asp-action="Create"
+           class="btn btn-datacode">
+
+            Registrar alumno
+
+        </a>
+
+    </div>
+}
+else
+{
+    <div class="student-grid">
+
+        @foreach (var alumno in Model)
+        {
+            <div class="student-card">
+
+                <div class="student-avatar">
+
+                    @if (!string.IsNullOrWhiteSpace(alumno.Nombre))
+                    {
+                        @alumno.Nombre.Substring(0, 1).ToUpper()
+                    }
+                    else
+                    {
+                        <span>A</span>
+                    }
+
+                </div>
+
+                <div class="student-info">
+
+                    <h4>
+                        @alumno.Nombre
+                    </h4>
+
+                    <div class="student-data">
+
+                        <span>
+                            <i class="bi bi-credit-card-2-front"></i>
+                            @alumno.Matricula
+                        </span>
+
+                        <span>
+                            <i class="bi bi-envelope"></i>
+                            @alumno.Correo
+                        </span>
+
+                        <span>
+                            <i class="bi bi-clock"></i>
+                            @alumno.Turno
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="student-actions">
+
+                    <a asp-controller="Alumnos"
+                       asp-action="Details"
+                       asp-route-id="@alumno.Id"
+                       class="btn btn-sm btn-outline-secondary">
+
+                        <i class="bi bi-eye"></i>
+                        Ver
+
+                    </a>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+}
