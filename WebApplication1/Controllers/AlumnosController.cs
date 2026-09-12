@@ -6,11 +6,11 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
-    public class AlumnosController
+    public class AlumnosController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public AlumnosController(ApplicationDbContext context)
+        public  AlumnosController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -94,5 +94,10 @@ namespace WebApplication1.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+    private bool AlumnoExists(int id)
+        {
+            return _context.Alumnos.Any(e => e.Id == id);
+        }
     }
 }
+    
