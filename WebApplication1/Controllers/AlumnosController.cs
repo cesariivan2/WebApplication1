@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
-
 namespace WebApplication1.Controllers
 {
     public class AlumnosController : Controller
@@ -15,24 +14,34 @@ namespace WebApplication1.Controllers
             _context = context;
         }
 
-        // LISTAR
+        // ==========================================
+        // LISTAR ALUMNOS
+        // ==========================================
         public async Task<IActionResult> Index()
         {
-            var alumnos = await _context.Alumnos.ToListAsync();
+            var alumnos = await _context.Alumnos
+                .OrderBy(a => a.Nombre)
+                .ToListAsync();
+
             return View(alumnos);
         }
 
-        // ABRIR FORMULARIO CREAR
+        // ==========================================
+        // ABRIR FORMULARIO PARA CREAR
+        // ==========================================
         public IActionResult Create()
         {
             return View();
         }
 
+        // ==========================================
         // GUARDAR NUEVO ALUMNO
+        // ==========================================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Alumno alumno)
         {
+            // Evitar matrículas repetidas
             bool matriculaExiste = await _context.Alumnos
                 .AnyAsync(a => a.Matricula == alumno.Matricula);
 
@@ -44,10 +53,24 @@ namespace WebApplication1.Controllers
                 );
             }
 
+            // Validar turno
+            if (alumno.Turno != "Matutino" &&
+                alumno.Turno != "Vespertino")
+            {
+                ModelState.AddModelError(
+                    "Turno",
+                    "El turno debe ser Matutino o Vespertino."
+                );
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Alumnos.Add(alumno);
+
                 await _context.SaveChangesAsync();
+
+                TempData["Exito"] =
+                    "Alumno registrado correctamente.";
 
                 return RedirectToAction(nameof(Index));
             }
@@ -55,7 +78,9 @@ namespace WebApplication1.Controllers
             return View(alumno);
         }
 
+        // ==========================================
         // VER DETALLES
+        // ==========================================
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -74,7 +99,9 @@ namespace WebApplication1.Controllers
             return View(alumno);
         }
 
-        // ABRIR FORMULARIO EDITAR
+        // ==========================================
+        // ABRIR FORMULARIO PARA EDITAR
+        // ==========================================
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,7 +109,8 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var alumno = await _context.Alumnos.FindAsync(id);
+            var alumno = await _context.Alumnos
+                .FindAsync(id);
 
             if (alumno == null)
             {
@@ -92,26 +120,60 @@ namespace WebApplication1.Controllers
             return View(alumno);
         }
 
+        // ==========================================
         // GUARDAR EDICIÓN
+        // ==========================================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Alumno alumno)
+        public async Task<IActionResult> Edit(
+            int id,
+            Alumno alumno)
         {
             if (id != alumno.Id)
             {
                 return NotFound();
             }
 
+            // Evitar que otro alumno tenga
+            // la misma matrícula
+            bool matriculaExiste = await _context.Alumnos
+                .AnyAsync(a =>
+                    a.Matricula == alumno.Matricula &&
+                    a.Id != alumno.Id
+                );
+
+            if (matriculaExiste)
+            {
+                ModelState.AddModelError(
+                    "Matricula",
+                    "Ya existe otro alumno con esta matrícula."
+                );
+            }
+
+            // Validar turno
+            if (alumno.Turno != "Matutino" &&
+                alumno.Turno != "Vespertino")
+            {
+                ModelState.AddModelError(
+                    "Turno",
+                    "El turno debe ser Matutino o Vespertino."
+                );
+            }
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(alumno);
+                    _context.Alumnos.Update(alumno);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AlumnoExists(alumno.Id))
+                    bool existe = await _context.Alumnos
+                        .AnyAsync(a => a.Id == alumno.Id);
+
+                    if (!existe)
                     {
                         return NotFound();
                     }
@@ -119,13 +181,18 @@ namespace WebApplication1.Controllers
                     throw;
                 }
 
+                TempData["Exito"] =
+                    "Alumno actualizado correctamente.";
+
                 return RedirectToAction(nameof(Index));
             }
 
             return View(alumno);
         }
 
-        // ABRIR CONFIRMACIÓN DE BORRADO
+        // ==========================================
+        // ABRIR CONFIRMACIÓN PARA ELIMINAR
+        // ==========================================
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -144,25 +211,41 @@ namespace WebApplication1.Controllers
             return View(alumno);
         }
 
-        // BORRAR REALMENTE
+        // ==========================================
+        // ELIMINAR ALUMNO
+        // ==========================================
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var alumno = await _context.Alumnos.FindAsync(id);
+            // Evitar borrar alumno con inscripciones
+            bool tieneInscripciones = await _context.Inscripciones
+                .AnyAsync(i => i.alumnoId == id);
 
-            if (alumno != null)
+            if (tieneInscripciones)
             {
-                _context.Alumnos.Remove(alumno);
-                await _context.SaveChangesAsync();
+                TempData["Error"] =
+                    "No se puede eliminar al alumno porque tiene inscripciones registradas.";
+
+                return RedirectToAction(nameof(Index));
             }
 
-            return RedirectToAction(nameof(Index));
-        }
+            var alumno = await _context.Alumnos
+                .FindAsync(id);
 
-        private bool AlumnoExists(int id)
-        {
-            return _context.Alumnos.Any(a => a.Id == id);
+            if (alumno == null)
+            {
+                return NotFound();
+            }
+
+            _context.Alumnos.Remove(alumno);
+
+            await _context.SaveChangesAsync();
+
+            TempData["Exito"] =
+                "Alumno eliminado correctamente.";
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
