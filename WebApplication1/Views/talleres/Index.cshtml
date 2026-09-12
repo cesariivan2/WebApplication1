@@ -4,52 +4,151 @@
     ViewData["Title"] = "Talleres";
 }
 
-<div class="page-header mb-4">
-    <h1>Talleres</h1>
+<div class="container py-4">
 
-    <p class="text-muted">
-        Explora los talleres disponibles en DATA CODE 2.0.
-    </p>
-</div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-<div class="row g-4">
+        <div>
+            <h1>
+                <i class="bi bi-easel"></i>
+                Talleres
+            </h1>
 
-    @foreach (var taller in Model)
+            <p class="text-muted mb-0">
+                Talleres disponibles en DATA CODE 2.0
+            </p>
+        </div>
+
+        @if (User.IsInRole("Administrador") ||
+             User.IsInRole("Comite"))
+        {
+            <a asp-action="Create"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-circle"></i>
+                Nuevo taller
+            </a>
+        }
+
+    </div>
+
+
+    @if (TempData["Exito"] != null)
     {
-        <div class="col-lg-4 col-md-6">
+        <div class="alert alert-success">
+            @TempData["Exito"]
+        </div>
+    }
 
-            <div class="workshop-card h-100">
 
-                <div class="workshop-image-placeholder">
-                    <i class="bi bi-code-slash"></i>
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No hay talleres registrados.
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+
+            @foreach (var taller in Model)
+            {
+                <div class="col-md-6 col-xl-4">
+
+                    <div class="card shadow-sm border-0 h-100">
+
+                        <div class="card-body">
+
+                            <div class="mb-3">
+
+                                <span class="badge bg-primary">
+                                    DATA CODE 2.0
+                                </span>
+
+                            </div>
+
+
+                            <h4>
+                                @taller.nombre
+                            </h4>
+
+
+                            <p class="text-muted">
+                                @taller.descripcion
+                            </p>
+
+
+                            <hr />
+
+
+                            <p class="mb-0">
+
+                                <i class="bi bi-person"></i>
+
+                                <strong>
+                                    Instructor:
+                                </strong>
+
+                                @taller.instructor
+
+                            </p>
+
+                        </div>
+
+
+                        <div class="card-footer bg-white border-0">
+
+                            <div class="d-flex flex-wrap gap-2">
+
+                                @if (User.IsInRole("Administrador") ||
+                                     User.IsInRole("Comite"))
+                                {
+                                    <a asp-action="Edit"
+                                       asp-route-id="@taller.id"
+                                       class="btn btn-outline-primary">
+
+                                        <i class="bi bi-pencil"></i>
+                                        Editar
+                                    </a>
+
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@taller.id"
+                                       class="btn btn-outline-danger">
+
+                                        <i class="bi bi-trash"></i>
+                                        Eliminar
+                                    </a>
+                                }
+
+
+                                @if (User.IsInRole("Administrador"))
+                                {
+                                    <a asp-controller="HorariosTaller"
+                                       asp-action="Index"
+                                       class="btn btn-outline-secondary">
+
+                                        <i class="bi bi-calendar3"></i>
+                                        Horarios
+                                    </a>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
-
-                <div class="workshop-body">
-
-                    <h4>
-                        @taller.nombre
-                    </h4>
-
-                    <p class="workshop-instructor">
-                        <i class="bi bi-person"></i>
-                        @taller.instructor
-                    </p>
-
-                    <p>
-                        @taller.descripcion
-                    </p>
-
-                    <a asp-controller="Talleres"
-                       asp-action="Details"
-                       asp-route-id="@taller.id"
-                       class="btn workshop-btn">
-
-                        Ver taller
-                    </a>
-
-                </div>
-
-            </div>
+            }
 
         </div>
     }

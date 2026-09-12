@@ -1119,3 +1119,17 @@ body {
     color: #737987;
     margin: 15px 0 25px;
 }
+.sidebar {
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.sidebar-menu {
+    padding-bottom: 30px;
+}
+
+.sidebar .menu-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}

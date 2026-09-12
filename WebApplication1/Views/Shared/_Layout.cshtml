@@ -2,6 +2,7 @@
 <html lang="es">
 
 <head>
+
     <meta charset="utf-8" />
 
     <meta name="viewport"
@@ -20,6 +21,7 @@
     <link rel="stylesheet"
           href="~/css/site.css"
           asp-append-version="true" />
+
 </head>
 
 
@@ -50,24 +52,21 @@
         </div>
 
 
-        <!-- ======================================
-             MENÚ
-        ======================================= -->
         <nav class="sidebar-menu">
 
+            <!-- INICIO -->
             <a asp-controller="Home"
                asp-action="Index"
                class="menu-link">
 
                 <i class="bi bi-house"></i>
-
                 Inicio
+
             </a>
 
 
             @if (User.Identity?.IsAuthenticated == true)
             {
-
                 <!-- ==================================
                      ALUMNO
                 =================================== -->
@@ -78,7 +77,6 @@
                        class="menu-link">
 
                         <i class="bi bi-easel"></i>
-
                         Talleres
                     </a>
 
@@ -88,7 +86,6 @@
                        class="menu-link">
 
                         <i class="bi bi-check2-square"></i>
-
                         Mis inscripciones
                     </a>
 
@@ -98,7 +95,6 @@
                        class="menu-link">
 
                         <i class="bi bi-person-badge"></i>
-
                         Mi gafete
                     </a>
 
@@ -108,7 +104,6 @@
                        class="menu-link">
 
                         <i class="bi bi-controller"></i>
-
                         Torneos
                     </a>
 
@@ -118,7 +113,6 @@
                        class="menu-link">
 
                         <i class="bi bi-check2-circle"></i>
-
                         Votaciones
                     </a>
                 }
@@ -134,7 +128,6 @@
                        class="menu-link">
 
                         <i class="bi bi-easel"></i>
-
                         Talleres
                     </a>
 
@@ -144,7 +137,6 @@
                        class="menu-link">
 
                         <i class="bi bi-calendar-event"></i>
-
                         Agenda
                     </a>
 
@@ -154,7 +146,6 @@
                        class="menu-link">
 
                         <i class="bi bi-person-check"></i>
-
                         Asistencias
                     </a>
 
@@ -164,7 +155,6 @@
                        class="menu-link">
 
                         <i class="bi bi-building"></i>
-
                         Espacios
                     </a>
 
@@ -174,14 +164,13 @@
                        class="menu-link">
 
                         <i class="bi bi-speedometer2"></i>
-
                         Resumen
                     </a>
                 }
 
 
                 <!-- ==================================
-                     COMITÉ
+                     COMITE
                 =================================== -->
                 @if (User.IsInRole("Comite"))
                 {
@@ -190,7 +179,6 @@
                        class="menu-link">
 
                         <i class="bi bi-people"></i>
-
                         Propuestas
                     </a>
 
@@ -200,7 +188,6 @@
                        class="menu-link">
 
                         <i class="bi bi-easel"></i>
-
                         Talleres
                     </a>
                 }
@@ -212,19 +199,19 @@
                 @if (User.IsInRole("Administrador"))
                 {
                     <a asp-controller="Usuarios"
-   asp-action="Index"
-   class="menu-link">
+                       asp-action="Index"
+                       class="menu-link">
 
-    <i class="bi bi-person-gear"></i>
+                        <i class="bi bi-person-gear"></i>
+                        Usuarios
+                    </a>
 
-    Usuarios
-</a>
+
                     <a asp-controller="Alumnos"
                        asp-action="Index"
                        class="menu-link">
 
                         <i class="bi bi-people"></i>
-
                         Alumnos
                     </a>
 
@@ -234,7 +221,6 @@
                        class="menu-link">
 
                         <i class="bi bi-easel"></i>
-
                         Talleres
                     </a>
 
@@ -244,7 +230,6 @@
                        class="menu-link">
 
                         <i class="bi bi-calendar3"></i>
-
                         Horarios
                     </a>
 
@@ -254,7 +239,6 @@
                        class="menu-link">
 
                         <i class="bi bi-check2-square"></i>
-
                         Inscripciones
                     </a>
 
@@ -264,7 +248,6 @@
                        class="menu-link">
 
                         <i class="bi bi-person-check"></i>
-
                         Asistencias
                     </a>
 
@@ -274,7 +257,6 @@
                        class="menu-link">
 
                         <i class="bi bi-calendar-event"></i>
-
                         Logística
                     </a>
 
@@ -284,7 +266,6 @@
                        class="menu-link">
 
                         <i class="bi bi-people"></i>
-
                         Comité
                     </a>
 
@@ -294,7 +275,6 @@
                        class="menu-link">
 
                         <i class="bi bi-controller"></i>
-
                         Torneos
                     </a>
 
@@ -304,72 +284,33 @@
                        class="menu-link">
 
                         <i class="bi bi-bar-chart-line"></i>
-
                         Reportes
                     </a>
                 }
-            }
-
-        </nav>
 
 
-        <!-- ======================================
-             FOOTER SIDEBAR
-        ======================================= -->
-        <div class="sidebar-footer">
-
-            @if (User.Identity?.IsAuthenticated == true)
-            {
-                <small>
-                    ROL:
-
-                    @if (User.IsInRole("Administrador"))
-                    {
-                        <strong>
-                            ADMINISTRADOR
-                        </strong>
-                    }
-                    else if (User.IsInRole("Alumno"))
-                    {
-                        <strong>
-                            ALUMNO
-                        </strong>
-                    }
-                    else if (User.IsInRole("Tallerista"))
-                    {
-                        <strong>
-                            TALLERISTA
-                        </strong>
-                    }
-                    else if (User.IsInRole("Comite"))
-                    {
-                        <strong>
-                            COMITÉ
-                        </strong>
-                    }
-                </small>
-
-
-                <div class="mt-2">
-
-                    <small>
-                        @User.Identity.Name
-                    </small>
-
-                </div>
-
-
+                <!-- ==================================
+                     LOGOUT SIEMPRE VISIBLE
+                =================================== -->
                 <form asp-controller="Account"
                       asp-action="Logout"
                       method="post"
                       class="mt-3">
 
                     <button type="submit"
-                            class="btn btn-link text-white p-0 text-decoration-none">
+                            class="menu-link"
+                            style="
+                                border: 0;
+                                background: transparent;
+                                width: 100%;
+                                text-align: left;
+                                cursor: pointer;
+                                color: inherit;
+                            ">
 
                         <i class="bi bi-box-arrow-right"></i>
-
                         Cerrar sesión
+
                     </button>
 
                 </form>
@@ -378,15 +319,15 @@
             {
                 <a asp-controller="Account"
                    asp-action="Login"
-                   class="text-white text-decoration-none">
+                   class="menu-link">
 
                     <i class="bi bi-box-arrow-in-right"></i>
-
                     Iniciar sesión
+
                 </a>
             }
 
-        </div>
+        </nav>
 
     </aside>
 
@@ -396,9 +337,8 @@
     =========================================== -->
     <main class="main-content">
 
-        <!-- ======================================
-             TOPBAR
-        ======================================= -->
+
+        <!-- TOPBAR -->
         <header class="topbar">
 
             <div>
@@ -450,8 +390,8 @@
                        asp-action="Login">
 
                         <i class="bi bi-box-arrow-in-right"></i>
-
                         Iniciar sesión
+
                     </a>
                 }
 
@@ -460,9 +400,7 @@
         </header>
 
 
-        <!-- ======================================
-             CONTENIDO DE CADA VIEW
-        ======================================= -->
+        <!-- CONTENIDO -->
         <div class="page-content">
 
             @RenderBody()
@@ -473,10 +411,6 @@
 
 </div>
 
-
-<!-- ==========================================
-     SCRIPTS
-=========================================== -->
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
