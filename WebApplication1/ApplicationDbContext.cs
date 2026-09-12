@@ -19,10 +19,13 @@ namespace WebApplication1.Data
         public DbSet<HorarioTaller> HorariosTaller { get; set; }
 
         public DbSet<Inscripcion> Inscripciones { get; set; }
+        public DbSet<Asistencia> Asistencias { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
+            builder.Entity<Asistencia>()
+    .HasIndex(a => a.InscripcionId)
+    .IsUnique();
             builder.Entity<Alumno>()
                 .HasOne(a => a.Usuario)
                 .WithOne()
@@ -43,6 +46,14 @@ namespace WebApplication1.Data
     })
     .IsUnique();
 
+
+
+
+            builder.Entity<Asistencia>()
+            .HasOne(a => a.Inscripcion)
+            .WithOne()
+            .HasForeignKey<Asistencia>(a => a.InscripcionId)
+            .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
