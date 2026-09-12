@@ -1,7 +1,7 @@
-﻿@model WebApplication1.Models.Alumno
+﻿@model WebApplication1.Models.AlumnoCreateViewModel
 
 @{
-    ViewData["Title"] = "Nuevo alumno";
+    ViewData["Title"] = "Registrar alumno";
 }
 
 <div class="registration-page">
@@ -12,9 +12,7 @@
 
         <i class="bi bi-arrow-left"></i>
         Volver a alumnos
-
     </a>
-
 
     <div class="registration-card">
 
@@ -27,11 +25,10 @@
             <h1>Registrar alumno</h1>
 
             <p>
-                Captura los datos del alumno participante.
+                Crea el alumno y su cuenta de acceso.
             </p>
 
         </div>
-
 
         <div class="registration-body">
 
@@ -40,78 +37,60 @@
                   method="post">
 
                 <div asp-validation-summary="ModelOnly"
-                     class="text-danger mb-3">
+                     class="alert alert-danger">
                 </div>
-
 
                 <div class="mb-3">
 
                     <label asp-for="Nombre"
                            class="form-label">
-
                         Nombre completo
-
                     </label>
 
                     <input asp-for="Nombre"
-                           class="form-control"
-                           placeholder="Ej. Juan Pérez López" />
+                           class="form-control" />
 
                     <span asp-validation-for="Nombre"
-                          class="text-danger">
-                    </span>
+                          class="text-danger"></span>
 
                 </div>
-
 
                 <div class="mb-3">
 
                     <label asp-for="Matricula"
                            class="form-label">
-
                         Matrícula
-
                     </label>
 
                     <input asp-for="Matricula"
-                           class="form-control"
-                           placeholder="Ej. 23012345" />
+                           class="form-control" />
 
                     <span asp-validation-for="Matricula"
-                          class="text-danger">
-                    </span>
+                          class="text-danger"></span>
 
                 </div>
-
 
                 <div class="mb-3">
 
                     <label asp-for="Correo"
                            class="form-label">
-
-                        Correo electrónico
-
+                        Correo
                     </label>
 
                     <input asp-for="Correo"
                            type="email"
-                           class="form-control"
-                           placeholder="correo@ejemplo.com" />
+                           class="form-control" />
 
                     <span asp-validation-for="Correo"
-                          class="text-danger">
-                    </span>
+                          class="text-danger"></span>
 
                 </div>
 
-
-                <div class="mb-4">
+                <div class="mb-3">
 
                     <label asp-for="Turno"
                            class="form-label">
-
                         Turno
-
                     </label>
 
                     <select asp-for="Turno"
@@ -132,17 +111,35 @@
                     </select>
 
                     <span asp-validation-for="Turno"
-                          class="text-danger">
-                    </span>
+                          class="text-danger"></span>
 
                 </div>
 
+                <div class="mb-4">
+
+                    <label asp-for="Password"
+                           class="form-label">
+                        Contraseña temporal
+                    </label>
+
+                    <input asp-for="Password"
+                           class="form-control" />
+
+                    <span asp-validation-for="Password"
+                          class="text-danger"></span>
+
+                    <small class="text-muted">
+                        El alumno usará esta contraseña
+                        para iniciar sesión.
+                    </small>
+
+                </div>
 
                 <button type="submit"
                         class="btn btn-register">
 
-                    <i class="bi bi-person-check"></i>
-                    Registrar alumno
+                    <i class="bi bi-person-plus"></i>
+                    Crear alumno y cuenta
 
                 </button>
 
@@ -154,11 +151,6 @@
 
 </div>
 
-
 @section Scripts {
-
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-
+    <partial name="_ValidationScriptsPartial" />
 }
