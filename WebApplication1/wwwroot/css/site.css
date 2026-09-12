@@ -481,3 +481,186 @@ body {
         background: #51071f;
         color: white;
     }
+.detail-page {
+    max-width: 1100px;
+    margin: auto;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #8f123d;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.detail-card {
+    background: white;
+    border-radius: 15px;
+    border: 1px solid #eee;
+    overflow: hidden;
+    box-shadow: 0 5px 25px rgba(0,0,0,.06);
+}
+
+.detail-header {
+    padding: 35px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    background: linear-gradient( 135deg, #4a071c, #8d123e );
+}
+
+.detail-icon {
+    width: 85px;
+    height: 85px;
+    border-radius: 18px;
+    background: rgba(255,255,255,.15);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+}
+
+.detail-header h1 {
+    margin: 10px 0;
+    font-size: 34px;
+    font-weight: 700;
+}
+
+.detail-badge {
+    background: rgba(255,255,255,.15);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.detail-body {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 35px;
+    padding: 35px;
+}
+
+.detail-description p {
+    color: #5f6775;
+    line-height: 1.7;
+}
+
+.detail-info-box {
+    background: #faf7f8;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.detail-info-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 20px 0;
+}
+
+    .detail-info-item > i {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #f3dde5;
+        color: #8f123d;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .detail-info-item div {
+        display: flex;
+        flex-direction: column;
+    }
+
+.btn-register {
+    width: 100%;
+    margin-top: 10px;
+    background: #7c0c33;
+    color: white;
+    padding: 12px;
+}
+
+    .btn-register:hover {
+        background: #590824;
+        color: white;
+    }
+.registration-page {
+    max-width: 850px;
+    margin: auto;
+}
+
+.registration-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid #eee;
+    box-shadow: 0 5px 25px rgba(0,0,0,.06);
+}
+
+.registration-header {
+    padding: 32px 35px;
+    color: white;
+    background: linear-gradient( 135deg, #4a071c, #8d123e );
+}
+
+    .registration-header h1 {
+        margin-top: 12px;
+        margin-bottom: 8px;
+        font-size: 31px;
+        font-weight: 700;
+    }
+
+    .registration-header p {
+        margin: 0;
+        color: rgba(255,255,255,.85);
+    }
+
+.registration-body {
+    padding: 35px;
+}
+
+    .registration-body .form-label {
+        font-weight: 700;
+        color: #273246;
+    }
+
+        .registration-body .form-label i {
+            color: #8f123d;
+            margin-right: 6px;
+        }
+
+    .registration-body .form-select {
+        min-height: 48px;
+        border-radius: 8px;
+        border: 1px solid #d8dbe0;
+    }
+
+        .registration-body .form-select:focus {
+            border-color: #8f123d;
+            box-shadow: 0 0 0 .2rem rgba(143,18,61,.12);
+        }
+
+.registration-note {
+    display: flex;
+    gap: 14px;
+    padding: 18px;
+    margin-bottom: 25px;
+    border-radius: 10px;
+    background: #fff7fa;
+    border: 1px solid #f2dbe3;
+}
+
+    .registration-note > i {
+        color: #8f123d;
+        font-size: 22px;
+    }
+
+    .registration-note p {
+        margin: 4px 0 0;
+        color: #626b78;
+    }

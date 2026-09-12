@@ -1,0 +1,87 @@
+﻿@model WebApplication1.Models.Taller
+
+@{
+    ViewData["Title"] = "Detalle del Taller";
+}
+
+<div class="detail-page">
+
+    <a asp-controller="Talleres"
+       asp-action="Index"
+       class="back-link">
+        <i class="bi bi-arrow-left"></i>
+        Volver a talleres
+    </a>
+
+    <div class="detail-card">
+
+        <div class="detail-header">
+
+            <div class="detail-icon">
+                <i class="bi bi-code-slash"></i>
+            </div>
+
+            <div>
+                <span class="detail-badge">
+                    DATA CODE 2.0
+                </span>
+
+                <h1>@Model.nombre</h1>
+
+                <p>
+                    <i class="bi bi-person"></i>
+                    Instructor: @Model.instructor
+                </p>
+            </div>
+
+        </div>
+
+        <div class="detail-body">
+
+            <div class="detail-description">
+
+                <h4>Acerca del taller</h4>
+
+                <p>
+                    @Model.descripcion
+                </p>
+
+            </div>
+
+            <div class="detail-info-box">
+
+                <h5>Información</h5>
+
+                <div class="detail-info-item">
+                    <i class="bi bi-person-fill"></i>
+
+                    <div>
+                        <small>Instructor</small>
+                        <strong>@Model.instructor</strong>
+                    </div>
+                </div>
+
+                <div class="detail-info-item">
+                    <i class="bi bi-building"></i>
+
+                    <div>
+                        <small>Sede</small>
+                        <strong>UAdeO</strong>
+                    </div>
+                </div>
+
+                <a asp-controller="Inscripciones"
+                   asp-action="Create"
+                   class="btn btn-register">
+
+                    <i class="bi bi-check-circle"></i>
+                    Inscribirme
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

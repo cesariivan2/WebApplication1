@@ -1,0 +1,141 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Nueva inscripción";
+
+    var alumnos = ViewBag.Alumnos as IEnumerable<WebApplication1.Models.Alumno>;
+    var horarios = ViewBag.Horarios as IEnumerable<WebApplication1.Models.HorarioTaller>;
+}
+
+<div class="registration-page">
+
+    <a asp-controller="Talleres"
+       asp-action="Index"
+       class="back-link">
+        <i class="bi bi-arrow-left"></i>
+        Volver a talleres
+    </a>
+
+    <div class="registration-card">
+
+        <div class="registration-header">
+            <span class="detail-badge">DATA CODE 2.0</span>
+
+            <h1>Inscripción a taller</h1>
+
+            <p>
+                Selecciona un alumno y uno de los horarios disponibles.
+            </p>
+        </div>
+
+        <div class="registration-body">
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    @TempData["Error"]
+                </div>
+            }
+
+            <form asp-controller="Inscripciones"
+                  asp-action="Create"
+                  method="post">
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        <i class="bi bi-person"></i>
+                        Alumno
+                    </label>
+
+                    <select name="alumnoId"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            Selecciona un alumno
+                        </option>
+
+                        @if (alumnos != null)
+                        {
+                            foreach (var alumno in alumnos)
+                            {
+                                <option value="@alumno.Id">
+                                    @alumno.Nombre - @alumno.Matricula - @alumno.Turno
+                                </option>
+                            }
+                        }
+
+                    </select>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        <i class="bi bi-calendar-event"></i>
+                        Taller y horario
+                    </label>
+
+                    <select name="horarioTallerId"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            Selecciona un horario
+                        </option>
+
+                        @if (horarios != null)
+                        {
+                            foreach (var horario in horarios)
+                            {
+                                <option value="@horario.id">
+
+                                    @horario.Taller?.nombre
+
+                                    -
+                                    @horario.Fecha.ToString("dd/MM/yyyy")
+
+                                    -
+                                    @horario.HoraInicio.ToString(@"hh\:mm")
+
+                                </option>
+                            }
+                        }
+
+                    </select>
+
+                </div>
+
+                <div class="registration-note">
+
+                    <i class="bi bi-info-circle-fill"></i>
+
+                    <div>
+                        <strong>Importante</strong>
+
+                        <p>
+                            El sistema revisará automáticamente que exista cupo
+                            para el turno del alumno y que no se encuentre
+                            inscrito previamente en el mismo horario.
+                        </p>
+                    </div>
+
+                </div>
+
+                <button type="submit"
+                        class="btn btn-register">
+
+                    <i class="bi bi-check-circle"></i>
+                    Confirmar inscripción
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
