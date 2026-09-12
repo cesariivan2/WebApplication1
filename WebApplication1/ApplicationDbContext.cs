@@ -30,5 +30,5 @@ namespace WebApplication1.Data
                 .OnDelete(DeleteBehavior.SetNull);
         }
     }
+    }
 
-}

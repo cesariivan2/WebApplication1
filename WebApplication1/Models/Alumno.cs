@@ -4,6 +4,9 @@ namespace WebApplication1.Models
 {
     public class Alumno
     {
+        public string? UsuarioId { get; set; }
+
+        public IdentityUser? Usuario { get; set; }
         public int Id { get; set; }
         [Required(ErrorMessage = "El nombre es obligatorio")]
         [StringLength(100)]
@@ -25,8 +28,6 @@ namespace WebApplication1.Models
         )]
         public string Turno { get; set; } = string.Empty;
 
-        public string? UsuarioId { get; set; }
 
-        public IdentityUser? Usuario { get; set; }
     }
 }
