@@ -8,10 +8,11 @@ namespace WebApplication1.Data
         public static async Task Inicializar(
             ApplicationDbContext context)
         {
-            // Si ya existen talleres, no volvemos a crearlos
+            // ==========================================
+            // CREAR TALLERES Y HORARIOS
+            // ==========================================
             if (!await context.Talleres.AnyAsync())
             {
-
                 var tallerIA = new Taller
                 {
                     nombre = "Introducción a Inteligencia Artificial",
@@ -42,81 +43,84 @@ namespace WebApplication1.Data
                 await context.SaveChangesAsync();
 
                 var horarios = new List<HorarioTaller>
-            {
-                new HorarioTaller
                 {
-                    tallerId = tallerIA.id,
-                    fecha = DateTime.Today.AddDays(1),
-                    horaInicio = new TimeSpan(9, 0, 0),
-                    horaFin = new TimeSpan(11, 0, 0),
-                    Espacio = "Laboratorio 1",
-                    CupoMatutino = 15,
-                    CupoVespertino = 15
-                },
+                    new HorarioTaller
+                    {
+                        tallerId = tallerIA.id,
+                        fecha = DateTime.Today.AddDays(1),
+                        horaInicio = new TimeSpan(9, 0, 0),
+                        horaFin = new TimeSpan(11, 0, 0),
+                        Espacio = "Laboratorio 1",
+                        CupoMatutino = 15,
+                        CupoVespertino = 15
+                    },
 
-                new HorarioTaller
-                {
-                    tallerId = tallerWeb.id,
-                    fecha = DateTime.Today.AddDays(1),
-                    horaInicio = new TimeSpan(11, 30, 0),
-                    horaFin = new TimeSpan(13, 30, 0),
-                    Espacio = "Laboratorio 2",
-                    CupoMatutino = 15,
-                    CupoVespertino = 15
-                },
+                    new HorarioTaller
+                    {
+                        tallerId = tallerWeb.id,
+                        fecha = DateTime.Today.AddDays(1),
+                        horaInicio = new TimeSpan(11, 30, 0),
+                        horaFin = new TimeSpan(13, 30, 0),
+                        Espacio = "Laboratorio 2",
+                        CupoMatutino = 15,
+                        CupoVespertino = 15
+                    },
 
-                new HorarioTaller
-                {
-                    tallerId = tallerCiberseguridad.id,
-                    fecha = DateTime.Today.AddDays(2),
-                    horaInicio = new TimeSpan(10, 0, 0),
-                    horaFin = new TimeSpan(12, 0, 0),
-                    Espacio = "Aula 5",
-                    CupoMatutino = 15,
-                    CupoVespertino = 15
-                }
-            };
+                    new HorarioTaller
+                    {
+                        tallerId = tallerCiberseguridad.id,
+                        fecha = DateTime.Today.AddDays(2),
+                        horaInicio = new TimeSpan(10, 0, 0),
+                        horaFin = new TimeSpan(12, 0, 0),
+                        Espacio = "Aula 5",
+                        CupoMatutino = 15,
+                        CupoVespertino = 15
+                    }
+                };
 
                 context.HorariosTaller.AddRange(horarios);
 
                 await context.SaveChangesAsync();
-                if (!await context.EventosDataCode.AnyAsync())
+            }
+
+            // ==========================================
+            // CREAR CONFIGURACIÓN DEL EVENTO
+            // ==========================================
+            if (!await context.EventosDataCode.AnyAsync())
+            {
+                var evento = new EventoDataCode
                 {
-                    var evento = new EventoDataCode
-                    {
-                        Nombre = "DATA CODE 2.0",
+                    Nombre = "DATA CODE 2.0",
 
-                        Descripcion =
-                            "Evento tecnológico universitario con talleres, torneos y retos de desarrollo.",
+                    Descripcion =
+                        "Evento tecnológico universitario con talleres, torneos y retos de desarrollo.",
 
-                        ModalidadReto = "Buildathon",
+                    ModalidadReto = "Buildathon",
 
-                        CoberturaTerritorial = "Local",
+                    CoberturaTerritorial = "Local",
 
-                        Sede = "UAdeO Unidad Regional Guamúchil",
+                    Sede = "UAdeO Unidad Regional Guamúchil",
 
-                        FechaInicio = DateTime.Today,
+                    FechaInicio = DateTime.Today,
 
-                        FechaFin = DateTime.Today.AddDays(1),
+                    FechaFin = DateTime.Today.AddDays(1),
 
-                        TieneCosto = false,
+                    TieneCosto = false,
 
-                        Costo = 0,
+                    Costo = 0,
 
-                        Moneda = "MXN",
+                    Moneda = "MXN",
 
-                        RegistroAbierto = true,
+                    RegistroAbierto = true,
 
-                        FechaLimiteRegistro =
-                            DateTime.Today.AddDays(7)
-                    };
+                    FechaLimiteRegistro =
+                        DateTime.Today.AddDays(7)
+                };
 
-                    context.EventosDataCode.Add(evento);
+                context.EventosDataCode.Add(evento);
 
-                    await context.SaveChangesAsync();
-                }
+                await context.SaveChangesAsync();
             }
         }
     }
 }
-    
