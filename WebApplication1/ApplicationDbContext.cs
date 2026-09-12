@@ -12,7 +12,9 @@ namespace WebApplication1.Data
             : base(options)
         {
         }
+        public DbSet<PropuestaComite> PropuestasComite { get; set; }
 
+        public DbSet<VotoPropuesta> VotosPropuesta { get; set; }
         public DbSet<Alumno> Alumnos { get; set; }
         public DbSet<Taller> Talleres { get; set; }
 
@@ -54,6 +56,30 @@ namespace WebApplication1.Data
             .WithOne()
             .HasForeignKey<Asistencia>(a => a.InscripcionId)
             .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<PropuestaComite>()
+    .HasOne(p => p.CreadoPorUsuario)
+    .WithMany()
+    .HasForeignKey(p => p.CreadoPorUsuarioId)
+    .OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<VotoPropuesta>()
+    .HasOne(v => v.PropuestaComite)
+    .WithMany()
+    .HasForeignKey(v => v.PropuestaComiteId)
+    .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<VotoPropuesta>()
+    .HasOne(v => v.Usuario)
+    .WithMany()
+    .HasForeignKey(v => v.UsuarioId)
+    .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<VotoPropuesta>()
+    .HasIndex(v => new
+    {
+        v.PropuestaComiteId,
+        v.UsuarioId
+    })
+    .IsUnique();
+
+
         }
     }
 }
