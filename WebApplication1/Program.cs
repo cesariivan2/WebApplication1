@@ -116,6 +116,10 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider
         .GetRequiredService<ApplicationDbContext>();
 
+    // Aplica automáticamente las migraciones pendientes
+    await context.Database.MigrateAsync();
+
+    // Inserta datos iniciales si hacen falta
     await DatosIniciales.Inicializar(context);
 }
 app.Run();
