@@ -22,6 +22,11 @@ namespace WebApplication1.Data
 
         public DbSet<Inscripcion> Inscripciones { get; set; }
         public DbSet<Asistencia> Asistencias { get; set; }
+        public DbSet<TorneoVideojuego> TorneosVideojuegos { get; set; }
+
+        public DbSet<ParticipanteTorneo> ParticipantesTorneo { get; set; }
+
+        public DbSet<PartidaTorneo> PartidasTorneo { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -78,7 +83,47 @@ namespace WebApplication1.Data
         v.UsuarioId
     })
     .IsUnique();
+            builder.Entity<ParticipanteTorneo>()
+    .HasOne(p => p.TorneoVideojuego)
+    .WithMany()
+    .HasForeignKey(p => p.TorneoVideojuegoId)
+    .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<ParticipanteTorneo>()
+                .HasOne(p => p.Alumno)
+                .WithMany()
+                .HasForeignKey(p => p.AlumnoId)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<ParticipanteTorneo>()
+    .HasIndex(p => new
+    {
+        p.TorneoVideojuegoId,
+        p.AlumnoId
+    })
+    .IsUnique();
+            builder.Entity<PartidaTorneo>()
+    .HasOne(p => p.TorneoVideojuego)
+    .WithMany()
+    .HasForeignKey(p => p.TorneoVideojuegoId)
+    .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<PartidaTorneo>()
+                .HasOne(p => p.Participante1)
+                .WithMany()
+                .HasForeignKey(p => p.Participante1Id)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<PartidaTorneo>()
+                .HasOne(p => p.Participante2)
+                .WithMany()
+                .HasForeignKey(p => p.Participante2Id)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<PartidaTorneo>()
+                .HasOne(p => p.Ganador)
+                .WithMany()
+                .HasForeignKey(p => p.GanadorId)
+                .OnDelete(DeleteBehavior.NoAction);
 
         }
     }
