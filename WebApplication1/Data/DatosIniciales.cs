@@ -9,41 +9,39 @@ namespace WebApplication1.Data
             ApplicationDbContext context)
         {
             // Si ya existen talleres, no volvemos a crearlos
-            if (await context.Talleres.AnyAsync())
+            if (!await context.Talleres.AnyAsync())
             {
-                return;
-            }
 
-            var tallerIA = new Taller
-            {
-                nombre = "Introducción a Inteligencia Artificial",
-                descripcion = "Fundamentos y aplicaciones prácticas de IA",
-                instructor = "Ing. Ana López"
-            };
+                var tallerIA = new Taller
+                {
+                    nombre = "Introducción a Inteligencia Artificial",
+                    descripcion = "Fundamentos y aplicaciones prácticas de IA",
+                    instructor = "Ing. Ana López"
+                };
 
-            var tallerWeb = new Taller
-            {
-                nombre = "Desarrollo Web",
-                descripcion = "Creación de aplicaciones web modernas",
-                instructor = "Ing. Carlos García"
-            };
+                var tallerWeb = new Taller
+                {
+                    nombre = "Desarrollo Web",
+                    descripcion = "Creación de aplicaciones web modernas",
+                    instructor = "Ing. Carlos García"
+                };
 
-            var tallerCiberseguridad = new Taller
-            {
-                nombre = "Ciberseguridad",
-                descripcion = "Principios básicos de seguridad informática",
-                instructor = "Ing. María Torres"
-            };
+                var tallerCiberseguridad = new Taller
+                {
+                    nombre = "Ciberseguridad",
+                    descripcion = "Principios básicos de seguridad informática",
+                    instructor = "Ing. María Torres"
+                };
 
-            context.Talleres.AddRange(
-                tallerIA,
-                tallerWeb,
-                tallerCiberseguridad
-            );
+                context.Talleres.AddRange(
+                    tallerIA,
+                    tallerWeb,
+                    tallerCiberseguridad
+                );
 
-            await context.SaveChangesAsync();
+                await context.SaveChangesAsync();
 
-            var horarios = new List<HorarioTaller>
+                var horarios = new List<HorarioTaller>
             {
                 new HorarioTaller
                 {
@@ -79,9 +77,46 @@ namespace WebApplication1.Data
                 }
             };
 
-            context.HorariosTaller.AddRange(horarios);
+                context.HorariosTaller.AddRange(horarios);
 
-            await context.SaveChangesAsync();
+                await context.SaveChangesAsync();
+                if (!await context.EventosDataCode.AnyAsync())
+                {
+                    var evento = new EventoDataCode
+                    {
+                        Nombre = "DATA CODE 2.0",
+
+                        Descripcion =
+                            "Evento tecnológico universitario con talleres, torneos y retos de desarrollo.",
+
+                        ModalidadReto = "Buildathon",
+
+                        CoberturaTerritorial = "Local",
+
+                        Sede = "UAdeO Unidad Regional Guamúchil",
+
+                        FechaInicio = DateTime.Today,
+
+                        FechaFin = DateTime.Today.AddDays(1),
+
+                        TieneCosto = false,
+
+                        Costo = 0,
+
+                        Moneda = "MXN",
+
+                        RegistroAbierto = true,
+
+                        FechaLimiteRegistro =
+                            DateTime.Today.AddDays(7)
+                    };
+
+                    context.EventosDataCode.Add(evento);
+
+                    await context.SaveChangesAsync();
+                }
+            }
         }
     }
 }
+    
