@@ -1,0 +1,194 @@
+﻿@model IEnumerable<WebApplication1.Models.HorarioTaller>
+
+@{
+    ViewData["Title"] = "Horarios";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h1 class="fw-bold mb-1">
+            Horarios de talleres
+        </h1>
+
+        <p class="text-muted mb-0">
+            Consulta y administra los horarios de DATA CODE 2.0.
+        </p>
+    </div>
+
+    <a asp-controller="HorariosTaller"
+       asp-action="Create"
+       class="btn btn-datacode">
+
+        <i class="bi bi-plus-circle"></i>
+        Nuevo horario
+    </a>
+
+</div>
+
+@if (TempData["Exito"] != null)
+{
+    <div class="alert alert-success">
+        <i class="bi bi-check-circle-fill"></i>
+        @TempData["Exito"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        @TempData["Error"]
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <div class="empty-state">
+
+        <i class="bi bi-calendar-x"></i>
+
+        <h3>No hay horarios registrados</h3>
+
+        <p>
+            Crea el primer horario para comenzar a organizar los talleres.
+        </p>
+
+        <a asp-controller="HorariosTaller"
+           asp-action="Create"
+           class="btn btn-datacode">
+
+            Crear horario
+        </a>
+
+    </div>
+}
+else
+{
+    <div class="row g-4">
+
+        @foreach (var horario in Model)
+        {
+            <div class="col-xl-4 col-lg-6">
+
+                <div class="schedule-card">
+
+                    <div class="schedule-card-header">
+
+                        <div class="schedule-icon">
+                            <i class="bi bi-calendar-event"></i>
+                        </div>
+
+                        <div>
+                            <small>TALLER</small>
+
+                            <h4>
+                                @(horario.Taller?.nombre ?? "Sin taller")
+                            </h4>
+                        </div>
+
+                    </div>
+
+                    <div class="schedule-card-body">
+
+                        <div class="schedule-row">
+
+                            <i class="bi bi-calendar3"></i>
+
+                            <div>
+                                <small>Fecha</small>
+                                <strong>
+                                    @horario.fecha.ToString("dd/MM/yyyy")
+                                </strong>
+                            </div>
+
+                        </div>
+
+                        <div class="schedule-row">
+
+                            <i class="bi bi-clock"></i>
+
+                            <div>
+                                <small>Horario</small>
+
+                                <strong>
+                                    @horario.horaInicio.ToString(@"hh\:mm")
+                                    -
+                                    @horario.horaFin.ToString(@"hh\:mm")
+                                </strong>
+                            </div>
+
+                        </div>
+
+                        <div class="schedule-row">
+
+                            <i class="bi bi-geo-alt"></i>
+
+                            <div>
+                                <small>Espacio</small>
+                                <strong>
+                                    @horario.Espacio
+                                </strong>
+                            </div>
+
+                        </div>
+
+                        <div class="schedule-capacity">
+
+                            <div>
+                                <span>Matutino</span>
+
+                                <strong>
+                                    @horario.CupoMatutino lugares
+                                </strong>
+                            </div>
+
+                            <div>
+                                <span>Vespertino</span>
+
+                                <strong>
+                                    @horario.CupoVespertino lugares
+                                </strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="schedule-actions">
+
+                        <a asp-controller="HorariosTaller"
+                           asp-action="Details"
+                           asp-route-id="@horario.id"
+                           class="btn btn-sm btn-outline-secondary">
+
+                            <i class="bi bi-eye"></i>
+                            Ver
+                        </a>
+
+                        <a asp-controller="HorariosTaller"
+                           asp-action="Edit"
+                           asp-route-id="@horario.id"
+                           class="btn btn-sm btn-outline-primary">
+
+                            <i class="bi bi-pencil"></i>
+                            Editar
+                        </a>
+
+                        <a asp-controller="HorariosTaller"
+                           asp-action="Delete"
+                           asp-route-id="@horario.id"
+                           class="btn btn-sm btn-outline-danger">
+
+                            <i class="bi bi-trash"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+}
