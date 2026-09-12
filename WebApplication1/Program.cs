@@ -106,4 +106,11 @@ using (var scope = app.Services.CreateScope())
         }
     }
 }
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider
+        .GetRequiredService<ApplicationDbContext>();
+
+    await DatosIniciales.Inicializar(context);
+}
 app.Run();
